@@ -1,0 +1,3286 @@
+Salut on va faire un truc . J'ai un fichier flutter project application mobile de cuisine complet que je veux faire check complet avec toi.
+Les modèles :
+catégori.dart:
+class Categori {
+  final int id;
+  final String name;
+  final int color;
+
+  const Categori({
+    this.id = 0,
+    required this.name,
+    required this.color,
+  }) : assert(color >= 0, 'Color must be a positive integer');
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id != 0 ? id : null,
+      'name': name,
+      'color': color,
+    };
+  }
+
+  static Categori fromMap(Map<String, dynamic> map) {
+    return Categori(
+      id: map['id'] ?? 0,
+      name: map['name'] ?? '',
+      color: map['color'] ?? 0,
+    );
+  }
+
+  Categori copyWith({
+    int? id,
+    String? name,
+    int? color,
+  }) {
+    return Categori(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      color: color ?? this.color,
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    return other is Categori &&
+        other.id == id &&
+        other.name == name &&
+        other.color == color;
+  }
+
+  @override
+  int get hashCode => id.hashCode ^ name.hashCode ^ color.hashCode;
+
+  @override
+  String toString() => 'Categori(id: $id, name: $name, color: $color)';
+}
+
+
+ingredient.dart:
+class Ingredient {
+  final int id;
+  final int recipeId;
+  final String name;
+  final double quantity;
+  final String unit;
+
+  const Ingredient({
+    this.id = 0,
+    this.recipeId = 0,
+    required this.name,
+    required this.quantity,
+    required this.unit,
+  }) : assert(quantity >= 0, 'Quantity must be a positive number');
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id != 0 ? id : null,
+      'recipeId': recipeId,
+      'name': name,
+      'quantity': quantity,
+      'unit': unit,
+    };
+  }
+
+  static Ingredient fromMap(Map<String, dynamic> map) {
+    return Ingredient(
+      id: map['id'] ?? 0,
+      recipeId: map['recipeId'] ?? 0,
+      name: map['name'] ?? '',
+      quantity: (map['quantity'] ?? 0).toDouble(),
+      unit: map['unit'] ?? '',
+    );
+  }
+
+  Ingredient copyWith({
+    int? id,
+    int? recipeId,
+    String? name,
+    double? quantity,
+    String? unit,
+  }) {
+    return Ingredient(
+      id: id ?? this.id,
+      recipeId: recipeId ?? this.recipeId,
+      name: name ?? this.name,
+      quantity: quantity ?? this.quantity,
+      unit: unit ?? this.unit,
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    return other is Ingredient &&
+        other.id == id &&
+        other.recipeId == recipeId &&
+        other.name == name &&
+        other.quantity == quantity &&
+        other.unit == unit;
+  }
+
+  @override
+  int get hashCode =>
+      id.hashCode ^
+      recipeId.hashCode ^
+      name.hashCode ^
+      quantity.hashCode ^
+      unit.hashCode;
+
+  @override
+  String toString() =>
+      'Ingredient(id: $id, recipeId: $recipeId, name: $name, quantity: $quantity, unit: $unit)';
+}
+
+
+recipe.dart:
+import 'ingredient.dart';
+import 'step.dart';
+
+/// Représente le niveau de difficulté d'une recette
+enum Difficulty {
+  easy(1),
+  medium(2),
+  hard(3);
+
+  final int value;
+  const Difficulty(this.value);
+
+  static Difficulty fromValue(int value) {
+    return Difficulty.values.firstWhere(
+      (difficulty) => difficulty.value == value,
+      orElse: () => Difficulty.medium,
+    );
+  }
+}
+
+class Recipe {
+  final int id;
+  final String title;
+  final String description;
+  final int preparationTime; // en minutes
+  final int cookingTime; // en minutes
+  final int servings;
+  final Difficulty difficulty;
+  final String imageUrl;
+  final bool isFavorite;
+  final int categoryId;
+  final List<Ingredient> ingredients;
+  final List<RecipeStep> steps;
+
+  const Recipe({
+    this.id = 0,
+    required this.title,
+    required this.description,
+    required this.preparationTime,
+    required this.cookingTime,
+    required this.servings,
+    required this.difficulty,
+    required this.imageUrl,
+    this.isFavorite = false,
+    required this.categoryId,
+    required this.ingredients,
+    required this.steps,
+  })  : assert(preparationTime >= 0, 'Preparation time must be non-negative'),
+        assert(cookingTime >= 0, 'Cooking time must be non-negative'),
+        assert(servings > 0, 'Servings must be greater than 0');
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id != 0 ? id : null,
+      'title': title,
+      'description': description,
+      'preparationTime': preparationTime,
+      'cookingTime': cookingTime,
+      'servings': servings,
+      'difficulty': difficulty.value,
+      'imageUrl': imageUrl,
+      'isFavorite': isFavorite ? 1 : 0,
+      'categoryId': categoryId,
+    };
+  }
+
+  static Recipe fromMap(
+    Map<String, dynamic> map,
+    List<Map<String, dynamic>> ingredientsMaps,
+    List<Map<String, dynamic>> stepsMaps,
+  ) {
+    List<Ingredient> ingredients = ingredientsMaps
+        .map((ingredientMap) => Ingredient.fromMap(ingredientMap))
+        .toList();
+
+    List<RecipeStep> steps = stepsMaps
+        .map((stepMap) => RecipeStep.fromMap(stepMap))
+        .toList();
+
+    // Trier les étapes par numéro
+    steps.sort((a, b) => a.stepNumber.compareTo(b.stepNumber));
+
+    return Recipe(
+      id: map['id'] ?? 0,
+      title: map['title'] ?? '',
+      description: map['description'] ?? '',
+      preparationTime: map['preparationTime'] ?? 0,
+      cookingTime: map['cookingTime'] ?? 0,
+      servings: map['servings'] ?? 1,
+      difficulty: Difficulty.fromValue(map['difficulty'] ?? 2),
+      imageUrl: map['imageUrl'] ?? '',
+      isFavorite: (map['isFavorite'] ?? 0) == 1,
+      categoryId: map['categoryId'] ?? 0,
+      ingredients: ingredients,
+      steps: steps,
+    );
+  }
+
+  /// Retourne le temps total de préparation et cuisson en minutes
+  int get totalTime => preparationTime + cookingTime;
+
+  Recipe copyWith({
+    int? id,
+    String? title,
+    String? description,
+    int? preparationTime,
+    int? cookingTime,
+    int? servings,
+    Difficulty? difficulty,
+    String? imageUrl,
+    bool? isFavorite,
+    int? categoryId,
+    List<Ingredient>? ingredients,
+    List<RecipeStep>? steps,
+  }) {
+    return Recipe(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      description: description ?? this.description,
+      preparationTime: preparationTime ?? this.preparationTime,
+      cookingTime: cookingTime ?? this.cookingTime,
+      servings: servings ?? this.servings,
+      difficulty: difficulty ?? this.difficulty,
+      imageUrl: imageUrl ?? this.imageUrl,
+      isFavorite: isFavorite ?? this.isFavorite,
+      categoryId: categoryId ?? this.categoryId,
+      ingredients: ingredients ?? this.ingredients,
+      steps: steps ?? this.steps,
+    );
+  }
+
+  /// Crée une copie de la recette avec son statut favori inversé
+  Recipe toggleFavorite() {
+    return copyWith(isFavorite: !isFavorite);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    
+    return other is Recipe &&
+        other.id == id &&
+        other.title == title &&
+        other.description == description &&
+        other.preparationTime == preparationTime &&
+        other.cookingTime == cookingTime &&
+        other.servings == servings &&
+        other.difficulty == difficulty &&
+        other.imageUrl == imageUrl &&
+        other.isFavorite == isFavorite &&
+        other.categoryId == categoryId &&
+        _listEquals(other.ingredients, ingredients) &&
+        _listEquals(other.steps, steps);
+  }
+
+  // Helper pour comparer les listes
+  bool _listEquals<T>(List<T>? a, List<T>? b) {
+    if (a == null && b == null) return true;
+    if (a == null || b == null) return false;
+    if (a.length != b.length) return false;
+    
+    for (int i = 0; i < a.length; i++) {
+      if (a[i] != b[i]) return false;
+    }
+    
+    return true;
+  }
+
+  @override
+  int get hashCode {
+    return id.hashCode ^
+        title.hashCode ^
+        description.hashCode ^
+        preparationTime.hashCode ^
+        cookingTime.hashCode ^
+        servings.hashCode ^
+        difficulty.hashCode ^
+        imageUrl.hashCode ^
+        isFavorite.hashCode ^
+        categoryId.hashCode ^
+        ingredients.hashCode ^
+        steps.hashCode;
+  }
+
+  @override
+  String toString() {
+    return 'Recipe(id: $id, title: $title, difficulty: ${difficulty.name}, ' 
+        'preparationTime: $preparationTime, cookingTime: $cookingTime, '
+        'servings: $servings, isFavorite: $isFavorite, '
+        'ingredients: ${ingredients.length}, steps: ${steps.length})';
+  }
+}
+
+
+step.dart:
+class RecipeStep {
+  final int id;
+  final int recipeId;
+  final int stepNumber;
+  final String description;
+
+  const RecipeStep({
+    this.id = 0,
+    this.recipeId = 0,
+    required this.stepNumber,
+    required this.description,
+  }) : assert(stepNumber > 0, 'Step number must be greater than 0');
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id != 0 ? id : null,
+      'recipeId': recipeId,
+      'stepNumber': stepNumber,
+      'description': description,
+    };
+  }
+
+  static RecipeStep fromMap(Map<String, dynamic> map) {
+    return RecipeStep(
+      id: map['id'] ?? 0,
+      recipeId: map['recipeId'] ?? 0,
+      stepNumber: map['stepNumber'] ?? 1,
+      description: map['description'] ?? '',
+    );
+  }
+
+  RecipeStep copyWith({
+    int? id,
+    int? recipeId,
+    int? stepNumber,
+    String? description,
+  }) {
+    return RecipeStep(
+      id: id ?? this.id,
+      recipeId: recipeId ?? this.recipeId,
+      stepNumber: stepNumber ?? this.stepNumber,
+      description: description ?? this.description,
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    return other is RecipeStep &&
+        other.id == id &&
+        other.recipeId == recipeId &&
+        other.stepNumber == stepNumber &&
+        other.description == description;
+  }
+
+  @override
+  int get hashCode =>
+      id.hashCode ^
+      recipeId.hashCode ^
+      stepNumber.hashCode ^
+      description.hashCode;
+
+  @override
+  String toString() =>
+      'RecipeStep(id: $id, recipeId: $recipeId, stepNumber: $stepNumber, description: $description)';
+}.
+
+database_helper.dart:
+import 'dart:async';
+import 'dart:io';
+import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:sqflite/sqflite.dart';
+import '../models/recipe.dart';
+import '../models/categori.dart';
+import '../models/ingredient.dart';
+import '../models/step.dart';
+
+class DatabaseHelper {
+  static final DatabaseHelper _instance = DatabaseHelper._internal();
+  factory DatabaseHelper() => _instance;
+
+  static Database? _database;
+
+  DatabaseHelper._internal();
+
+  Future<Database> get database async {
+    if (_database != null) return _database!;
+    _database = await _initDatabase();
+    return _database!;
+  }
+
+  Future<Database> _initDatabase() async {
+    Directory documentsDirectory = await getApplicationDocumentsDirectory();
+    String path = join(documentsDirectory.path, 'recipes.db');
+    return await openDatabase(
+      path,
+      version: 1,
+      onCreate: _createDb,
+    );
+  }
+
+  Future<void> _createDb(Database db, int version) async {
+    // Table des catégories
+    await db.execute('''
+      CREATE TABLE categories(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        color INTEGER NOT NULL
+      )
+    ''');
+    await db.execute('PRAGMA foreign_keys = ON');
+
+    // Table des recettes
+    await db.execute('''
+      CREATE TABLE recipes(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        title TEXT NOT NULL,
+        description TEXT,
+        preparationTime INTEGER NOT NULL,
+        cookingTime INTEGER NOT NULL,
+        servings INTEGER NOT NULL,
+        difficulty INTEGER NOT NULL,
+        imageUrl TEXT,
+        isFavorite INTEGER DEFAULT 0,
+        categoryId INTEGER,
+        createdAt INTEGER NOT NULL,
+        updatedAt INTEGER NOT NULL,
+        FOREIGN KEY (categoryId) REFERENCES categories (id)
+      )
+    ''');
+    await db.execute('PRAGMA foreign_keys = ON');
+
+    // Table des ingrédients
+    await db.execute('''
+      CREATE TABLE ingredients(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        recipeId INTEGER NOT NULL,
+        name TEXT NOT NULL,
+        quantity REAL NOT NULL,
+        unit TEXT,
+        FOREIGN KEY (recipeId) REFERENCES recipes (id) ON DELETE CASCADE
+      )
+    ''');
+    await db.execute('PRAGMA foreign_keys = ON');
+
+    // Table des étapes de préparation
+    await db.execute('''
+      CREATE TABLE steps(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        recipeId INTEGER NOT NULL,
+        stepNumber INTEGER NOT NULL,
+        description TEXT NOT NULL,
+        FOREIGN KEY (recipeId) REFERENCES recipes (id) ON DELETE CASCADE
+      )
+    ''');
+    await db.execute('PRAGMA foreign_keys = ON');
+
+    // quelques index
+    await db.execute('CREATE INDEX idx_recipes_category ON recipes(categoryId)');
+    await db.execute('CREATE INDEX idx_recipes_favorite ON recipes(isFavorite)');
+    await db.execute('CREATE INDEX idx_ingredients_recipe ON ingredients(recipeId)');
+    await db.execute('CREATE INDEX idx_steps_recipe ON steps(recipeId)');
+    await db.execute('CREATE INDEX idx_steps_number ON steps(recipeId, stepNumber)');
+
+    // Insertion de quelques catégories par défaut
+    await db.insert('categories', {'name': 'Entrées', 'color': 0xFF66BB6A});
+    await db.insert('categories', {'name': 'Plats principaux', 'color': 0xFFF44336});
+    await db.insert('categories', {'name': 'Desserts', 'color': 0xFFFFEB3B});
+    await db.insert('categories', {'name': 'Boissons', 'color': 0xFF2196F3});
+  }
+
+  // Méthodes CRUD pour les recettes
+
+  Future<int> insertRecipe(Recipe recipe) async {
+    Database db = await database;
+    // Horodatage
+    final now = DateTime.now().millisecondsSinceEpoch;
+    final recipeMap = recipe.toMap();
+    recipeMap['createdAt'] = now;
+    recipeMap['updatedAt'] = now;
+
+    int id = await db.insert('recipes', recipeMap);
+
+    // Insertion des ingrédients
+    for (var ingredient in recipe.ingredients) {
+      // Créer une copie avec le recipeId mis à jour
+      final updatedIngredient = ingredient.copyWith(recipeId: id);
+      await db.insert('ingredients', updatedIngredient.toMap());
+    }
+
+    // Insertion des étapes
+    for (var step in recipe.steps) {
+      // Créer une copie avec le recipeId mis à jour
+      final updatedStep = step.copyWith(recipeId: id);
+      await db.insert('steps', updatedStep.toMap());
+    }
+
+    return id;
+  }
+
+  Future<Recipe> getRecipe(int id) async {
+    Database db = await database;
+
+    // Récupérer la recette
+    List<Map<String, dynamic>> recipes = await db.query(
+      'recipes',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+
+    if (recipes.isEmpty) {
+      throw Exception('Recette non trouvée');
+    }
+
+    // Récupérer les ingrédients
+    List<Map<String, dynamic>> ingredients = await db.query(
+      'ingredients',
+      where: 'recipeId = ?',
+      whereArgs: [id],
+    );
+
+    // Récupérer les étapes
+    List<Map<String, dynamic>> steps = await db.query(
+      'steps',
+      where: 'recipeId = ?',
+      whereArgs: [id],
+      orderBy: 'stepNumber ASC',
+    );
+
+    return Recipe.fromMap(recipes.first, ingredients, steps);
+  }
+
+  Future<List<Recipe>> getAllRecipes() async {
+    Database db = await database;
+    List<Map<String, dynamic>> recipesMaps = await db.query('recipes');
+
+    List<Recipe> recipes = [];
+    for (var recipeMap in recipesMaps) {
+      int recipeId = recipeMap['id'];
+      
+      List<Map<String, dynamic>> ingredients = await db.query(
+        'ingredients',
+        where: 'recipeId = ?',
+        whereArgs: [recipeId],
+      );
+
+      List<Map<String, dynamic>> steps = await db.query(
+        'steps',
+        where: 'recipeId = ?',
+        whereArgs: [recipeId],
+        orderBy: 'stepNumber ASC',
+      );
+
+      recipes.add(Recipe.fromMap(recipeMap, ingredients, steps));
+    }
+
+    return recipes;
+  }
+
+  Future<List<Recipe>> getRecipesByCategory(int categoryId) async {
+    Database db = await database;
+    List<Map<String, dynamic>> recipesMaps = await db.query(
+      'recipes',
+      where: 'categoryId = ?',
+      whereArgs: [categoryId],
+    );
+
+    List<Recipe> recipes = [];
+    for (var recipeMap in recipesMaps) {
+      int recipeId = recipeMap['id'];
+      
+      List<Map<String, dynamic>> ingredients = await db.query(
+        'ingredients',
+        where: 'recipeId = ?',
+        whereArgs: [recipeId],
+      );
+
+      List<Map<String, dynamic>> steps = await db.query(
+        'steps',
+        where: 'recipeId = ?',
+        whereArgs: [recipeId],
+        orderBy: 'stepNumber ASC',
+      );
+
+      recipes.add(Recipe.fromMap(recipeMap, ingredients, steps));
+    }
+
+    return recipes;
+  }
+
+  Future<int> updateRecipe(Recipe recipe) async {
+    Database db = await database;
+
+    final recipeMap = recipe.toMap();
+    recipeMap['updatedAt'] = DateTime.now().millisecondsSinceEpoch;
+
+    // Mettre à jour la recette
+    await db.update(
+      'recipes',
+      recipeMap,
+      where: 'id = ?',
+      whereArgs: [recipe.id],
+    );
+
+    // Supprimer les anciens ingrédients et étapes
+    await db.delete(
+      'ingredients',
+      where: 'recipeId = ?',
+      whereArgs: [recipe.id],
+    );
+
+    await db.delete(
+      'steps',
+      where: 'recipeId = ?',
+      whereArgs: [recipe.id],
+    );
+
+    // Insérer les nouveaux ingrédients et étapes
+    for (var ingredient in recipe.ingredients) {
+      // Créer une copie avec le recipeId mis à jour
+      final updatedIngredient = ingredient.copyWith(recipeId: recipe.id);
+      await db.insert('ingredients', updatedIngredient.toMap());
+    }
+
+    for (var step in recipe.steps) {
+      // Créer une copie avec le recipeId mis à jour
+      final updatedStep = step.copyWith(recipeId: recipe.id);
+      await db.insert('steps', updatedStep.toMap());
+    }
+
+    return recipe.id;
+  }
+
+  Future<int> deleteRecipe(int id) async {
+    Database db = await database;
+
+    // Avec ON DELETE CASCADE, la suppression de la recette
+    // entraînera la suppression des ingrédients et des étapes
+    return await db.delete(
+      'recipes',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
+
+  // Méthodes pour les catégories
+
+  Future<List<Categori>> getAllCategories() async {
+    Database db = await database;
+    List<Map<String, dynamic>> maps = await db.query('categories');
+    return List.generate(maps.length, (i) => Categori.fromMap(maps[i]));
+  }
+
+  Future<int> insertCategory(Categori category) async {
+    Database db = await database;
+    return await db.insert('categories', category.toMap());
+  }
+}
+
+
+
+recipe_service.dart:
+import 'package:flutter/foundation.dart';
+import '../models/recipe.dart';
+import '../models/categori.dart';
+import 'database_helper.dart';
+
+class RecipeService with ChangeNotifier {
+  final DatabaseHelper _dbHelper = DatabaseHelper();
+
+  List<Recipe> _recipes = [];
+  List<Categori> _categories = [];
+
+  List<Recipe> get recipes => List.unmodifiable(_recipes);
+  List<Categori> get categories => List.unmodifiable(_categories);
+
+  RecipeService() {
+    _loadCategories();
+    _loadRecipes();
+  }
+
+  Future<void> _loadCategories() async {
+    _categories = await _dbHelper.getAllCategories();
+    notifyListeners();
+  }
+
+  Future<void> _loadRecipes() async {
+    _recipes = await _dbHelper.getAllRecipes();
+    notifyListeners();
+  }
+
+  Future<void> addRecipe(Recipe recipe) async {
+    final id = await _dbHelper.insertRecipe(recipe);
+    // Créer une nouvelle instance avec l'ID mis à jour
+    final newRecipe = recipe.copyWith(id: id);
+    _recipes.add(newRecipe);
+    notifyListeners();
+  }
+
+  Future<void> updateRecipe(Recipe recipe) async {
+    await _dbHelper.updateRecipe(recipe);
+    final index = _recipes.indexWhere((r) => r.id == recipe.id);
+    if (index != -1) {
+      _recipes[index] = recipe;
+      notifyListeners();
+    }
+  }
+
+  Future<void> deleteRecipe(int id) async {
+    await _dbHelper.deleteRecipe(id);
+    _recipes.removeWhere((recipe) => recipe.id == id);
+    notifyListeners();
+  }
+
+  Future<void> toggleFavorite(int id) async {
+    final index = _recipes.indexWhere((recipe) => recipe.id == id);
+    if (index != -1) {
+      // Utiliser la méthode toggleFavorite disponible dans le modèle Recipe
+      final updatedRecipe = _recipes[index].toggleFavorite();
+      await _dbHelper.updateRecipe(updatedRecipe);
+      _recipes[index] = updatedRecipe;
+      notifyListeners();
+    }
+  }
+
+  List<Recipe> getRecipesByCategory(int categoryId) {
+    return _recipes.where((recipe) => recipe.categoryId == categoryId).toList();
+  }
+
+  List<Recipe> getFavoriteRecipes() {
+    return _recipes.where((recipe) => recipe.isFavorite).toList();
+  }
+
+  Future<void> addCategory(Categori category) async {
+    final id = await _dbHelper.insertCategory(category);
+    // Créer une nouvelle instance avec l'ID mis à jour
+    final newCategory = category.copyWith(id: id);
+    _categories.add(newCategory);
+    notifyListeners();
+  }
+
+  Categori getCategoryById(int id) {
+    return _categories.firstWhere(
+      (category) => category.id == id,
+      orElse: () => throw Exception('Catégorie non trouvée'),
+    );
+  }
+}
+
+
+
+Ceci ci dessus ont été corrigé. Passons à la suite, le main.dart :
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'screens/main_screen.dart';
+import 'services/recipe_service.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => RecipeService()),
+      ],
+      child: MaterialApp(
+        title: 'Recettes de Cuisine',
+        theme: ThemeData(
+          // Couleurs primaires
+          primarySwatch: Colors.orange,
+          primaryColor: Colors.orange,
+          colorScheme: ColorScheme.fromSwatch(
+            primarySwatch: Colors.orange,
+            accentColor: Colors.deepOrange,
+          ),
+
+          // Appbar
+          appBarTheme: AppBarTheme(
+            elevation: 0,
+            centerTitle: true,
+            backgroundColor: Colors.orange,
+            foregroundColor: Colors.white,
+            iconTheme: IconThemeData(color: Colors.white),
+          ),
+
+          // Boutons
+          elevatedButtonTheme: ElevatedButtonThemeData(
+            style: ElevatedButton.styleFrom(
+              foregroundColor: Colors.white,
+              backgroundColor: Colors.orange,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+            ),
+          ),
+
+          // Cartes
+          cardTheme: CardTheme(
+            elevation: 2.0,
+            clipBehavior: Clip.antiAlias,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12.0),
+            ),
+          ),
+
+          // Typographie
+          textTheme: TextTheme(
+            headlineMedium: TextStyle(
+              fontSize: 24.0,
+              fontWeight: FontWeight.bold,
+              color: Colors.black87,
+            ),
+            headlineSmall: TextStyle(
+              fontSize: 20.0,
+              fontWeight: FontWeight.bold,
+              color: Colors.black87,
+            ),
+            titleLarge: TextStyle(
+              fontSize: 18.0,
+              fontWeight: FontWeight.bold,
+              color: Colors.black87,
+            ),
+            titleMedium: TextStyle(
+              fontSize: 16.0,
+              fontWeight: FontWeight.w500,
+              color: Colors.black87,
+            ),
+            bodyLarge: TextStyle(
+              fontSize: 16.0,
+              color: Colors.black87,
+            ),
+            bodyMedium: TextStyle(
+              fontSize: 14.0,
+              color: Colors.black87,
+            ),
+            bodySmall: TextStyle(
+              fontSize: 12.0,
+              color: Colors.black54,
+            ),
+          ),
+
+          // Fond d'écran
+          scaffoldBackgroundColor: Colors.grey[100],
+
+          // Entrées de formulaire
+          inputDecorationTheme: InputDecorationTheme(
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8.0),
+              borderSide: BorderSide(color: Colors.orange, width: 2.0),
+            ),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 16.0,
+              vertical: 12.0,
+            ),
+          ),
+        ),
+        home: MainScreen(),
+        debugShowCheckedModeBanner: false,
+      ),
+    );
+  }
+}
+
+
+Les screens:
+
+main_screen.dart:
+import 'package:flutter/material.dart';
+import 'home_screen.dart';
+import 'latest_recipes_screen.dart';
+import 'categories_screen.dart';
+import 'favorites_screen.dart';
+import 'profile_screen.dart';
+
+class MainScreen extends StatefulWidget {
+  @override
+  _MainScreenState createState() => _MainScreenState();
+}
+
+class _MainScreenState extends State<MainScreen> {
+  int _selectedIndex = 0;
+
+  final List<Widget> _screens = [
+    HomeScreen(),
+    LatestRecipesScreen(),
+    CategoriesScreen(),
+    FavoritesScreen(),
+    ProfileScreen(),
+  ];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: _screens[_selectedIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Accueil'),
+          BottomNavigationBarItem(icon: Icon(Icons.update), label: 'Dernières'),
+          BottomNavigationBarItem(icon: Icon(Icons.category), label: 'Catégories'),
+          BottomNavigationBarItem(icon: Icon(Icons.favorite), label: 'Favoris'),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profil'),
+        ],
+        selectedFontSize: 15,
+        selectedItemColor: Colors.orange[700],
+        unselectedItemColor: Colors.black,
+        unselectedFontSize: 10,
+        showUnselectedLabels: true,
+        selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold),
+      ),
+    );
+  }
+}..
+
+home_screen.dart:
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../services/recipe_service.dart';
+import '../models/categori.dart';
+import '../widgets/recipe_card.dart';
+import 'add_recipe_screen.dart';
+import 'category_recipes_screen.dart';
+
+class HomeScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final recipeService = Provider.of<RecipeService>(context);
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Recettes de Cuisine'),
+      ),
+      body: ListView(
+        children: [
+          // Barre de recherche
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: TextField(
+              decoration: InputDecoration(
+                hintText: 'Rechercher une recette...',
+                prefixIcon: Icon(Icons.search),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              onChanged: (value) {
+                // Tu peux ajouter la logique de recherche ici
+              },
+            ),
+          ),
+
+          // Section Recettes populaires
+          if (recipeService.recipes.isNotEmpty) ...[
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Text(
+                'Recettes populaires',
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+            ),
+            SizedBox(
+              height: 250,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                padding: EdgeInsets.all(16.0),
+                itemCount: recipeService.recipes.length > 5
+                    ? 5
+                    : recipeService.recipes.length,
+                itemBuilder: (context, index) {
+                  return Container(
+                    width: 200,
+                    margin: EdgeInsets.only(right: 16),
+                    child: RecipeCard(recipe: recipeService.recipes[index]),
+                  );
+                },
+              ),
+            ),
+          ],
+
+          // Section Catégories
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Text(
+              'Catégories',
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+          ),
+          SizedBox(
+            height: 120,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              padding: EdgeInsets.all(16.0),
+              itemCount: recipeService.categories.length,
+              itemBuilder: (context, index) {
+                Categori category = recipeService.categories[index];
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) =>
+                            CategoryRecipesScreen(category: category),
+                      ),
+                    );
+                  },
+                  child: Container(
+                    width: 100,
+                    margin: EdgeInsets.only(right: 16.0),
+                    decoration: BoxDecoration(
+                      color: Color(category.color),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Center(
+                      child: Text(
+                        category.name,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => AddRecipeScreen()),
+          );
+        },
+      ),
+    );
+  }
+}..
+
+latest_recipes_screen.dart:
+import 'package:flutter/material.dart';
+
+class LatestRecipesScreen extends StatelessWidget {
+  final List<Map<String, String>> latestRecipes = [
+    {
+      'title': 'Spaghetti Carbonara',
+      'image': 'assets/images/recipe1.jpg',
+    },
+    {
+      'title': 'Poulet au curry',
+      'image': 'assets/images/recipe2.jpg',
+    },
+    {
+      'title': 'Tarte aux pommes',
+      'image': 'assets/images/recipe3.jpg',
+    },
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.grey[50],
+      appBar: AppBar(
+        backgroundColor: Colors.orange[700],
+        title: Text('Dernières Recettes'),
+        elevation: 0,
+      ),
+      body: ListView.builder(
+        padding: const EdgeInsets.all(16),
+        itemCount: latestRecipes.length,
+        itemBuilder: (context, index) {
+          final recipe = latestRecipes[index];
+          return Container(
+            margin: EdgeInsets.only(bottom: 16),
+            height: 180,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+              image: DecorationImage(
+                image: AssetImage(recipe['image']!),
+                fit: BoxFit.cover,
+              ),
+            ),
+            alignment: Alignment.bottomLeft,
+            padding: const EdgeInsets.all(16),
+            child: Text(
+              recipe['title']!,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                shadows: [Shadow(color: Colors.black45, blurRadius: 4)],
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}..
+
+favorites_screen.dart:
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../services/recipe_service.dart';
+import '../widgets/recipe_card.dart';
+
+class FavoritesScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Recettes favorites'),
+      ),
+      body: Consumer<RecipeService>(
+        builder: (context, recipeService, child) {
+          final favoriteRecipes = recipeService.getFavoriteRecipes();
+
+          if (favoriteRecipes.isEmpty) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.favorite_border,
+                    size: 60,
+                    color: Colors.grey[400],
+                  ),
+                  SizedBox(height: 16),
+                  Text(
+                    'Aucune recette favorite',
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.grey[600],
+                    ),
+                  ),
+                  SizedBox(height: 8),
+                  Text(
+                    'Ajoutez des recettes à vos favoris pour les retrouver ici',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.grey[600],
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }
+
+          return ListView.builder(
+            padding: EdgeInsets.all(16.0),
+            itemCount: favoriteRecipes.length,
+            itemBuilder: (context, index) {
+              return RecipeCard(recipe: favoriteRecipes[index]);
+            },
+          );
+        },
+      ),
+    );
+  }
+}..
+
+
+edit_recipe_screen.dart:
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
+import '../models/recipe.dart';
+import '../models/ingredient.dart';
+import '../models/step.dart';
+import '../services/recipe_service.dart';
+
+class EditRecipeScreen extends StatefulWidget {
+  final Recipe recipe;
+
+  const EditRecipeScreen({Key? key, required this.recipe}) : super(key: key);
+
+  @override
+  _EditRecipeScreenState createState() => _EditRecipeScreenState();
+}
+
+class _EditRecipeScreenState extends State<EditRecipeScreen> {
+  final _formKey = GlobalKey<FormState>();
+  late TextEditingController _titleController;
+  late TextEditingController _descriptionController;
+  late TextEditingController _prepTimeController;
+  late TextEditingController _cookTimeController;
+  late TextEditingController _servingsController;
+
+  late int _selectedDifficulty;
+  late int _selectedCategoryId;
+  late String _imageUrl;
+  File? _imageFile;
+  final ImagePicker _picker = ImagePicker();
+
+  late List<Map<String, dynamic>> _ingredients;
+  late List<Map<String, dynamic>> _steps;
+
+  final _ingredientNameController = TextEditingController();
+  final _ingredientQuantityController = TextEditingController();
+  final _ingredientUnitController = TextEditingController();
+  final _stepDescriptionController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Initialiser les contrôleurs avec les valeurs de la recette
+    _titleController = TextEditingController(text: widget.recipe.title);
+    _descriptionController = TextEditingController(text: widget.recipe.description);
+    _prepTimeController = TextEditingController(text: widget.recipe.preparationTime.toString());
+    _cookTimeController = TextEditingController(text: widget.recipe.cookingTime.toString());
+    _servingsController = TextEditingController(text: widget.recipe.servings.toString());
+
+    _selectedDifficulty = widget.recipe.difficulty;
+    _selectedCategoryId = widget.recipe.categoryId;
+    _imageUrl = widget.recipe.imageUrl;
+
+    // Convertir les ingrédients et les étapes en maps
+    _ingredients = widget.recipe.ingredients.map((ingredient) => {
+      'name': ingredient.name,
+      'quantity': ingredient.quantity,
+      'unit': ingredient.unit,
+    }).toList();
+
+    _steps = widget.recipe.steps.map((step) => {
+      'stepNumber': step.stepNumber,
+      'description': step.description,
+    }).toList();
+  }
+
+  @override
+  void dispose() {
+    _titleController.dispose();
+    _descriptionController.dispose();
+    _prepTimeController.dispose();
+    _cookTimeController.dispose();
+    _servingsController.dispose();
+    _ingredientNameController.dispose();
+    _ingredientQuantityController.dispose();
+    _ingredientUnitController.dispose();
+    _stepDescriptionController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final recipeService = Provider.of<RecipeService>(context);
+
+    return Scaffold(
+        appBar: AppBar(
+        title: Text('Modifier la recette'),
+    ),
+    body: Form(
+    key: _formKey,
+    child: SingleChildScrollView(
+    padding: EdgeInsets.all(16.0),
+    child: Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+    // Section d'image
+    _buildImageSection(),
+    SizedBox(height: 16.0),
+
+    // Section des informations générales
+    Text(
+    'Informations générales',
+    style: Theme.of(context).textTheme.titleLarge,
+    ),
+    SizedBox(height: 8.0),
+    TextFormField(
+    controller: _titleController,
+    decoration: InputDecoration(
+    labelText: 'Titre de la recette',
+    border: OutlineInputBorder(),
+    ),
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Veuillez entrer un titre';
+        }
+        return null;
+      },
+    ),
+      SizedBox(height: 8.0),
+      TextFormField(
+        controller: _descriptionController,
+        decoration: InputDecoration(
+          labelText: 'Description',
+          border: OutlineInputBorder(),
+        ),
+        maxLines: 3,
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            return 'Veuillez entrer une description';
+          }
+          return null;
+        },
+      ),
+      SizedBox(height: 16.0),
+
+      // Ligne 1: Temps de préparation et Temps de cuisson
+      Row(
+        children: [
+          Expanded(
+            child: TextFormField(
+              controller: _prepTimeController,
+              decoration: InputDecoration(
+                labelText: 'Temps de préparation (min)',
+                border: OutlineInputBorder(),
+              ),
+              keyboardType: TextInputType.number,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Requis';
+                }
+                if (int.tryParse(value) == null) {
+                  return 'Nombre requis';
+                }
+                return null;
+              },
+            ),
+          ),
+          SizedBox(width: 16.0),
+          Expanded(
+            child: TextFormField(
+              controller: _cookTimeController,
+              decoration: InputDecoration(
+                labelText: 'Temps de cuisson (min)',
+                border: OutlineInputBorder(),
+              ),
+              keyboardType: TextInputType.number,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Requis';
+                }
+                if (int.tryParse(value) == null) {
+                  return 'Nombre requis';
+                }
+                return null;
+              },
+            ),
+          ),
+        ],
+      ),
+      SizedBox(height: 16.0),
+
+      // Ligne 2: Portions et Difficulté
+      Row(
+        children: [
+          Expanded(
+            child: TextFormField(
+              controller: _servingsController,
+              decoration: InputDecoration(
+                labelText: 'Nombre de portions',
+                border: OutlineInputBorder(),
+              ),
+              keyboardType: TextInputType.number,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Requis';
+                }
+                if (int.tryParse(value) == null) {
+                  return 'Nombre requis';
+                }
+                return null;
+              },
+            ),
+          ),
+          SizedBox(width: 16.0),
+          Expanded(
+            child: DropdownButtonFormField<int>(
+              value: _selectedDifficulty,
+              decoration: InputDecoration(
+                labelText: 'Difficulté',
+                border: OutlineInputBorder(),
+              ),
+              items: [
+                DropdownMenuItem(value: 1, child: Text('Facile')),
+                DropdownMenuItem(value: 2, child: Text('Moyen')),
+                DropdownMenuItem(value: 3, child: Text('Difficile')),
+              ],
+              onChanged: (value) {
+                setState(() {
+                  _selectedDifficulty = value!;
+                });
+              },
+            ),
+          ),
+        ],
+      ),
+      SizedBox(height: 16.0),
+
+      // Catégorie
+      DropdownButtonFormField<int>(
+        value: _selectedCategoryId,
+        decoration: InputDecoration(
+          labelText: 'Catégorie',
+          border: OutlineInputBorder(),
+        ),
+        items: recipeService.categories.map((category) {
+          return DropdownMenuItem(
+            value: category.id,
+            child: Text(category.name),
+          );
+        }).toList(),
+        onChanged: (value) {
+          setState(() {
+            _selectedCategoryId = value!;
+          });
+        },
+      ),
+      SizedBox(height: 24.0),
+
+      // Section des ingrédients
+      _buildIngredientSection(),
+      SizedBox(height: 24.0),
+
+      // Section des étapes
+      _buildStepSection(),
+      SizedBox(height: 32.0),
+
+      // Bouton de sauvegarde
+      Center(
+        child: ElevatedButton(
+          onPressed: _updateRecipe,
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 32.0, vertical: 12.0),
+            child: Text('Mettre à jour la recette'),
+          ),
+        ),
+      ),
+    ],
+    ),
+    ),
+    ),
+    );
+  }
+
+  Widget _buildImageSection() {
+    return Center(
+      child: Column(
+        children: [
+          GestureDetector(
+            onTap: _pickImage,
+            child: Container(
+              height: 200,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: Colors.grey[300],
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              child: _imageFile != null
+                  ? ClipRRect(
+                borderRadius: BorderRadius.circular(10.0),
+                child: Image.file(
+                  _imageFile!,
+                  fit: BoxFit.cover,
+                ),
+              )
+                  : _imageUrl.isNotEmpty
+                  ? ClipRRect(
+                borderRadius: BorderRadius.circular(10.0),
+                child: Image.network(
+                  _imageUrl,
+                  fit: BoxFit.cover,
+                  errorBuilder: (_, __, ___) => Icon(
+                    Icons.image,
+                    size: 60,
+                    color: Colors.grey[600],
+                  ),
+                ),
+              )
+                  : Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.add_photo_alternate,
+                    size: 60,
+                    color: Colors.grey[600],
+                  ),
+                  SizedBox(height: 8),
+                  Text(
+                    'Ajouter une image',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.grey[600],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          SizedBox(height: 8),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton.icon(
+                onPressed: _pickImage,
+                icon: Icon(Icons.photo_library),
+                label: Text('Galerie'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blueGrey,
+                ),
+              ),
+              const SizedBox(width: 16),
+              ElevatedButton.icon(
+                onPressed: _takePicture,
+                icon: Icon(Icons.camera_alt),
+                label: Text('Caméra'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blueGrey,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildIngredientSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Ingrédients',
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+            TextButton.icon(
+              onPressed: _showAddIngredientDialog,
+              icon: Icon(Icons.add),
+              label: Text('Ajouter'),
+            ),
+          ],
+        ),
+        if (_ingredients.isEmpty)
+          Center(
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 16.0),
+              child: Text(
+                'Aucun ingrédient ajouté',
+                style: TextStyle(
+                  color: Colors.grey[600],
+                  fontStyle: FontStyle.italic,
+                ),
+              ),
+            ),
+          )
+        else
+          ListView.builder(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            itemCount: _ingredients.length,
+            itemBuilder: (context, index) {
+              final ingredient = _ingredients[index];
+              return Card(
+                margin: EdgeInsets.only(bottom: 8.0),
+                child: ListTile(
+                  title: Text(ingredient['name']),
+                  subtitle: Text('${ingredient['quantity']} ${ingredient['unit']}'),
+                  trailing: IconButton(
+                    icon: Icon(Icons.delete, color: Colors.red),
+                    onPressed: () {
+                      setState(() {
+                        _ingredients.removeAt(index);
+                      });
+                    },
+                  ),
+                ),
+              );
+            },
+          ),
+      ],
+    );
+  }
+
+  Widget _buildStepSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Étapes de préparation',
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+            TextButton.icon(
+              onPressed: _showAddStepDialog,
+              icon: Icon(Icons.add),
+              label: Text('Ajouter'),
+            ),
+          ],
+        ),
+        if (_steps.isEmpty)
+          Center(
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 16.0),
+              child: Text(
+                'Aucune étape ajoutée',
+                style: TextStyle(
+                  color: Colors.grey[600],
+                  fontStyle: FontStyle.italic,
+                ),
+              ),
+            ),
+          )
+        else
+          ReorderableListView.builder(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            itemCount: _steps.length,
+            itemBuilder: (context, index) {
+              final step = _steps[index];
+              return Card(
+                key: Key('step_$index'),
+                margin: EdgeInsets.only(bottom: 8.0),
+                child: ListTile(
+                  leading: CircleAvatar(
+                    backgroundColor: Colors.orange,
+                    child: Text('${index + 1}'),
+                  ),
+                  title: Text(step['description']),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                        icon: Icon(Icons.edit, color: Colors.blue),
+                        onPressed: () => _editStep(index),
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.delete, color: Colors.red),
+                        onPressed: () {
+                          setState(() {
+                            _steps.removeAt(index);
+                            // Mettre à jour les numéros d'étapes
+                            for (int i = 0; i < _steps.length; i++) {
+                              _steps[i]['stepNumber'] = i + 1;
+                            }
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+            onReorder: (oldIndex, newIndex) {
+              setState(() {
+                if (oldIndex < newIndex) {
+                  newIndex -= 1;
+                }
+                final item = _steps.removeAt(oldIndex);
+                _steps.insert(newIndex, item);
+
+                // Mettre à jour les numéros d'étapes
+                for (int i = 0; i < _steps.length; i++) {
+                  _steps[i]['stepNumber'] = i + 1;
+                }
+              });
+            },
+          ),
+      ],
+    );
+  }
+
+  Future<void> _pickImage() async {
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      setState(() {
+        _imageFile = File(image.path);
+        _imageUrl = image.path; // Dans une vraie application, vous devriez téléverser l'image sur un serveur
+      });
+    }
+  }
+
+  Future<void> _takePicture() async {
+    final XFile? image = await _picker.pickImage(source: ImageSource.camera);
+    if (image != null) {
+      setState(() {
+        _imageFile = File(image.path);
+        _imageUrl = image.path; // Dans une vraie application, vous devriez téléverser l'image sur un serveur
+      });
+    }
+  }
+
+  void _showAddIngredientDialog() {
+    _ingredientNameController.clear();
+    _ingredientQuantityController.clear();
+    _ingredientUnitController.clear();
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Ajouter un ingrédient'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextFormField(
+              controller: _ingredientNameController,
+              decoration: InputDecoration(
+                labelText: 'Nom de l\'ingrédient',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            SizedBox(height: 8.0),
+            Row(
+              children: [
+                Expanded(
+                  flex: 2,
+                  child: TextFormField(
+                    controller: _ingredientQuantityController,
+                    decoration: InputDecoration(
+                      labelText: 'Quantité',
+                      border: OutlineInputBorder(),
+                    ),
+                    keyboardType: TextInputType.number,
+                  ),
+                ),
+                SizedBox(width: 8.0),
+                Expanded(
+                  flex: 3,
+                  child: TextFormField(
+                    controller: _ingredientUnitController,
+                    decoration: InputDecoration(
+                      labelText: 'Unité',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text('Annuler'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              if (_ingredientNameController.text.isNotEmpty &&
+                  _ingredientQuantityController.text.isNotEmpty) {
+                setState(() {
+                  _ingredients.add({
+                    'name': _ingredientNameController.text,
+                    'quantity': double.tryParse(_ingredientQuantityController.text) ?? 0,
+                    'unit': _ingredientUnitController.text,
+                  });
+                });
+                Navigator.pop(context);
+              }
+            },
+            child: Text('Ajouter'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showAddStepDialog() {
+    _stepDescriptionController.clear();
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Ajouter une étape'),
+        content: TextFormField(
+          controller: _stepDescriptionController,
+          decoration: InputDecoration(
+            labelText: 'Description',
+            border: OutlineInputBorder(),
+          ),
+          maxLines: 3,
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text('Annuler'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              if (_stepDescriptionController.text.isNotEmpty) {
+                setState(() {
+                  _steps.add({
+                    'stepNumber': _steps.length + 1,
+                    'description': _stepDescriptionController.text,
+                  });
+                });
+                Navigator.pop(context);
+              }
+            },
+            child: Text('Ajouter'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _editStep(int index) {
+    _stepDescriptionController.text = _steps[index]['description'];
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Modifier l\'étape ${index + 1}'),
+        content: TextFormField(
+          controller: _stepDescriptionController,
+          decoration: InputDecoration(
+            labelText: 'Description',
+            border: OutlineInputBorder(),
+          ),
+          maxLines: 3,
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text('Annuler'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              if (_stepDescriptionController.text.isNotEmpty) {
+                setState(() {
+                  _steps[index]['description'] = _stepDescriptionController.text;
+                });
+                Navigator.pop(context);
+              }
+            },
+            child: Text('Modifier'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _updateRecipe() {
+    if (_formKey.currentState!.validate()) {
+      if (_ingredients.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Ajoutez au moins un ingrédient')),
+        );
+        return;
+      }
+
+      if (_steps.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Ajoutez au moins une étape')),
+        );
+        return;
+      }
+
+      // Créer la liste d'ingrédients
+      final ingredients = _ingredients.map((ingr) => Ingredient(
+        name: ingr['name'],
+        quantity: ingr['quantity'],
+        unit: ingr['unit'],
+      )).toList();
+
+      // Créer la liste d'étapes
+      final steps = _steps.map((step) => RecipeStep(
+        stepNumber: step['stepNumber'],
+        description: step['description'],
+      )).toList();
+
+      // Créer la recette mise à jour
+      final updatedRecipe = Recipe(
+        id: widget.recipe.id,
+        title: _titleController.text,
+        description: _descriptionController.text,
+        preparationTime: int.parse(_prepTimeController.text),
+        cookingTime: int.parse(_cookTimeController.text),
+        servings: int.parse(_servingsController.text),
+        difficulty: _selectedDifficulty,
+        imageUrl: _imageUrl,
+        isFavorite: widget.recipe.isFavorite,
+        categoryId: _selectedCategoryId,
+        ingredients: ingredients,
+        steps: steps,
+      );
+
+      // Mettre à jour la recette
+      Provider.of<RecipeService>(context, listen: false).updateRecipe(updatedRecipe);
+
+      // Afficher un message de confirmation
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Recette mise à jour avec succès')),
+      );
+
+      // Retourner à l'écran précédent
+      Navigator.pop(context);
+    }
+  }
+}..
+
+
+
+category_recipes_screen.dart:
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../models/categori.dart';
+import '../services/recipe_service.dart';
+import '../widgets/recipe_card.dart';
+
+class CategoryRecipesScreen extends StatelessWidget {
+  final Categori category;
+
+  const CategoryRecipesScreen({Key? key, required this.category}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(category.name),
+        backgroundColor: Color(category.color),
+      ),
+      body: Consumer<RecipeService>(
+        builder: (context, recipeService, child) {
+          final categoryRecipes = recipeService.getRecipesByCategory(category.id);
+
+          if (categoryRecipes.isEmpty) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.restaurant_menu,
+                    size: 60,
+                    color: Colors.grey[400],
+                  ),
+                  SizedBox(height: 16),
+                  Text(
+                    'Aucune recette dans cette catégorie',
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.grey[600],
+                    ),
+                  ),
+                  SizedBox(height: 8),
+                  Text(
+                    'Ajoutez des recettes à cette catégorie pour les retrouver ici',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.grey[600],
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }
+
+          return ListView.builder(
+            padding: EdgeInsets.all(16.0),
+            itemCount: categoryRecipes.length,
+            itemBuilder: (context, index) {
+              return RecipeCard(recipe: categoryRecipes[index]);
+            },
+          );
+        },
+      ),
+    );
+  }
+}..
+
+
+categories_screen.dart:
+import 'package:flutter/material.dart';
+
+class CategoriesScreen extends StatelessWidget {
+  final List<Map<String, dynamic>> categories = [
+    {
+      'name': 'Entrées',
+      'image': 'assets/images/entrees.jpg',
+      'color': Colors.green,
+    },
+    {
+      'name': 'Plats',
+      'image': 'assets/images/plats.jpg',
+      'color': Colors.deepOrange,
+    },
+    {
+      'name': 'Desserts',
+      'image': 'assets/images/desserts.jpg',
+      'color': Colors.purple,
+    },
+    {
+      'name': 'Boissons',
+      'image': 'assets/images/boissons.jpg',
+      'color': Colors.teal,
+    },
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.grey[50],
+      appBar: AppBar(
+        backgroundColor: Colors.orange[700],
+        title: Text('Catégories'),
+        elevation: 0,
+      ),
+      body: GridView.builder(
+        padding: const EdgeInsets.all(16),
+        itemCount: categories.length,
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          mainAxisExtent: 160,
+          crossAxisSpacing: 16,
+          mainAxisSpacing: 16,
+        ),
+        itemBuilder: (context, index) {
+          final cat = categories[index];
+          return GestureDetector(
+            onTap: () {
+              // Naviguer vers les recettes de la catégorie
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                color: cat['color'].withOpacity(0.8),
+                borderRadius: BorderRadius.circular(16),
+                image: DecorationImage(
+                  image: AssetImage(cat['image']),
+                  fit: BoxFit.cover,
+                  colorFilter: ColorFilter.mode(
+                    cat['color'].withOpacity(0.4),
+                    BlendMode.darken,
+                  ),
+                ),
+              ),
+              alignment: Alignment.center,
+              child: Text(
+                cat['name'],
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  shadows: [Shadow(color: Colors.black45, blurRadius: 4)],
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}..
+
+
+
+add_recipe_screen.dart:
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
+import '../models/recipe.dart';
+import '../models/ingredient.dart';
+import '../models/step.dart';
+import '../services/recipe_service.dart';
+
+class AddRecipeScreen extends StatefulWidget {
+  @override
+  _AddRecipeScreenState createState() => _AddRecipeScreenState();
+}
+
+class _AddRecipeScreenState extends State<AddRecipeScreen> {
+  final _formKey = GlobalKey<FormState>();
+  final _titleController = TextEditingController();
+  final _descriptionController = TextEditingController();
+  final _prepTimeController = TextEditingController();
+  final _cookTimeController = TextEditingController();
+  final _servingsController = TextEditingController();
+
+  int _selectedDifficulty = 1;
+  int _selectedCategoryId = 1;
+  String _imageUrl = '';
+  File? _imageFile;
+  final ImagePicker _picker = ImagePicker();
+
+  final List<Map<String, dynamic>> _ingredients = [];
+  final List<Map<String, dynamic>> _steps = [];
+
+  final _ingredientNameController = TextEditingController();
+  final _ingredientQuantityController = TextEditingController();
+  final _ingredientUnitController = TextEditingController();
+  final _stepDescriptionController = TextEditingController();
+
+  @override
+  void dispose() {
+    _titleController.dispose();
+    _descriptionController.dispose();
+    _prepTimeController.dispose();
+    _cookTimeController.dispose();
+    _servingsController.dispose();
+    _ingredientNameController.dispose();
+    _ingredientQuantityController.dispose();
+    _ingredientUnitController.dispose();
+    _stepDescriptionController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final recipeService = Provider.of<RecipeService>(context);
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Ajouter une recette'),
+      ),
+      body: Form(
+        key: _formKey,
+        child: SingleChildScrollView(
+          padding: EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Section d'image
+              _buildImageSection(),
+              SizedBox(height: 16.0),
+
+              // Section des informations générales
+              Text(
+                'Informations générales',
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+              SizedBox(height: 8.0),
+              TextFormField(
+                controller: _titleController,
+                decoration: InputDecoration(
+                  labelText: 'Titre de la recette',
+                  border: OutlineInputBorder(),
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Veuillez entrer un titre';
+                  }
+                  return null;
+                },
+              ),
+              SizedBox(height: 8.0),
+              TextFormField(
+                controller: _descriptionController,
+                decoration: InputDecoration(
+                  labelText: 'Description',
+                  border: OutlineInputBorder(),
+                ),
+                maxLines: 3,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Veuillez entrer une description';
+                  }
+                  return null;
+                },
+              ),
+              SizedBox(height: 16.0),
+
+              // Ligne 1: Temps de préparation et Temps de cuisson
+              Row(
+                children: [
+                  Expanded(
+                    child: TextFormField(
+                      controller: _prepTimeController,
+                      decoration: InputDecoration(
+                        labelText: 'Temps de préparation (min)',
+                        border: OutlineInputBorder(),
+                      ),
+                      keyboardType: TextInputType.number,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Requis';
+                        }
+                        if (int.tryParse(value) == null) {
+                          return 'Nombre requis';
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                  SizedBox(width: 16.0),
+                  Expanded(
+                    child: TextFormField(
+                      controller: _cookTimeController,
+                      decoration: InputDecoration(
+                        labelText: 'Temps de cuisson (min)',
+                        border: OutlineInputBorder(),
+                      ),
+                      keyboardType: TextInputType.number,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Requis';
+                        }
+                        if (int.tryParse(value) == null) {
+                          return 'Nombre requis';
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 16.0),
+
+              // Ligne 2: Portions et Difficulté
+              Row(
+                children: [
+                  Expanded(
+                    child: TextFormField(
+                      controller: _servingsController,
+                      decoration: InputDecoration(
+                        labelText: 'Nombre de portions',
+                        border: OutlineInputBorder(),
+                      ),
+                      keyboardType: TextInputType.number,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Requis';
+                        }
+                        if (int.tryParse(value) == null) {
+                          return 'Nombre requis';
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                  SizedBox(width: 16.0),
+                  Expanded(
+                    child: DropdownButtonFormField<int>(
+                      value: _selectedDifficulty,
+                      decoration: InputDecoration(
+                        labelText: 'Difficulté',
+                        border: OutlineInputBorder(),
+                      ),
+                      items: [
+                        DropdownMenuItem(value: 1, child: Text('Facile')),
+                        DropdownMenuItem(value: 2, child: Text('Moyen')),
+                        DropdownMenuItem(value: 3, child: Text('Difficile')),
+                      ],
+                      onChanged: (value) {
+                        setState(() {
+                          _selectedDifficulty = value!;
+                        });
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 16.0),
+
+              // Catégorie
+              DropdownButtonFormField<int>(
+                value: _selectedCategoryId,
+                decoration: InputDecoration(
+                  labelText: 'Catégorie',
+                  border: OutlineInputBorder(),
+                ),
+                items: recipeService.categories.map((category) {
+                  return DropdownMenuItem(
+                    value: category.id,
+                    child: Text(category.name),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  setState(() {
+                    _selectedCategoryId = value!;
+                  });
+                },
+              ),
+              SizedBox(height: 24.0),
+
+              // Section des ingrédients
+              _buildIngredientSection(),
+              SizedBox(height: 24.0),
+
+              // Section des étapes
+              _buildStepSection(),
+              SizedBox(height: 32.0),
+
+              // Bouton de sauvegarde
+              Center(
+                child: ElevatedButton(
+                  onPressed: _saveRecipe,
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 32.0, vertical: 12.0),
+                    child: Text('Sauvegarder la recette'),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildImageSection() {
+    return Center(
+      child: Column(
+        children: [
+          GestureDetector(
+            onTap: _pickImage,
+            child: Container(
+              height: 200,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: Colors.grey[300],
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              child: _imageFile != null
+                  ? ClipRRect(
+                borderRadius: BorderRadius.circular(10.0),
+                child: Image.file(
+                  _imageFile!,
+                  fit: BoxFit.cover,
+                ),
+              )
+                  : Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.add_photo_alternate,
+                    size: 60,
+                    color: Colors.grey[600],
+                  ),
+                  SizedBox(height: 8),
+                  Text(
+                    'Ajouter une image',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.grey[600],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          SizedBox(height: 8),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton.icon(
+                onPressed: _pickImage,
+                icon: const Icon(Icons.photo_library),
+                label: const Text('Galerie'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blueGrey,
+                ),
+              ),
+              const SizedBox(width: 16),
+              ElevatedButton.icon(
+                onPressed: _takePicture,
+                icon: const Icon(Icons.camera_alt),
+                label: const Text('Caméra'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blueGrey,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildIngredientSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Ingrédients',
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+            TextButton.icon(
+              onPressed: _showAddIngredientDialog,
+              icon: Icon(Icons.add),
+              label: Text('Ajouter'),
+            ),
+          ],
+        ),
+        if (_ingredients.isEmpty)
+          Center(
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 16.0),
+              child: Text(
+                'Aucun ingrédient ajouté',
+                style: TextStyle(
+                  color: Colors.grey[600],
+                  fontStyle: FontStyle.italic,
+                ),
+              ),
+            ),
+          )
+        else
+          ListView.builder(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            itemCount: _ingredients.length,
+            itemBuilder: (context, index) {
+              final ingredient = _ingredients[index];
+              return Card(
+                margin: EdgeInsets.only(bottom: 8.0),
+                child: ListTile(
+                  title: Text(ingredient['name']),
+                  subtitle: Text('${ingredient['quantity']} ${ingredient['unit']}'),
+                  trailing: IconButton(
+                    icon: Icon(Icons.delete, color: Colors.red),
+                    onPressed: () {
+                      setState(() {
+                        _ingredients.removeAt(index);
+                      });
+                    },
+                  ),
+                ),
+              );
+            },
+          ),
+      ],
+    );
+  }
+
+  Widget _buildStepSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Étapes de préparation',
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+            TextButton.icon(
+              onPressed: _showAddStepDialog,
+              icon: Icon(Icons.add),
+              label: const Text('Ajouter'),
+            ),
+          ],
+        ),
+        if (_steps.isEmpty)
+          Center(
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 16.0),
+              child: Text(
+                'Aucune étape ajoutée',
+                style: TextStyle(
+                  color: Colors.grey[600],
+                  fontStyle: FontStyle.italic,
+                ),
+              ),
+            ),
+          )
+        else
+          ReorderableListView.builder(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            itemCount: _steps.length,
+            itemBuilder: (context, index) {
+              final step = _steps[index];
+              return Card(
+                key: Key('step_$index'),
+                margin: EdgeInsets.only(bottom: 8.0),
+                child: ListTile(
+                  leading: CircleAvatar(
+                    backgroundColor: Colors.orange,
+                    child: Text('${index + 1}'),
+                  ),
+                  title: Text(step['description']),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                        icon: Icon(Icons.edit, color: Colors.blue),
+                        onPressed: () => _editStep(index),
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.delete, color: Colors.red),
+                        onPressed: () {
+                          setState(() {
+                            _steps.removeAt(index);
+                            // Mettre à jour les numéros d'étapes
+                            for (int i = 0; i < _steps.length; i++) {
+                              _steps[i]['stepNumber'] = i + 1;
+                            }
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+            onReorder: (oldIndex, newIndex) {
+              setState(() {
+                if (oldIndex < newIndex) {
+                  newIndex -= 1;
+                }
+                final item = _steps.removeAt(oldIndex);
+                _steps.insert(newIndex, item);
+
+                // Mettre à jour les numéros d'étapes
+                for (int i = 0; i < _steps.length; i++) {
+                  _steps[i]['stepNumber'] = i + 1;
+                }
+              });
+            },
+          ),
+      ],
+    );
+  }
+
+  Future<void> _pickImage() async {
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      setState(() {
+        _imageFile = File(image.path);
+        _imageUrl = image.path; // Dans une vraie application, vous devriez téléverser l'image sur un serveur
+      });
+    }
+  }
+
+  Future<void> _takePicture() async {
+    final XFile? image = await _picker.pickImage(source: ImageSource.camera);
+    if (image != null) {
+      setState(() {
+        _imageFile = File(image.path);
+        _imageUrl = image.path; // Dans une vraie application, vous devriez téléverser l'image sur un serveur
+      });
+    }
+  }
+
+  void _showAddIngredientDialog() {
+    _ingredientNameController.clear();
+    _ingredientQuantityController.clear();
+    _ingredientUnitController.clear();
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Ajouter un ingrédient'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextFormField(
+              controller: _ingredientNameController,
+              decoration: InputDecoration(
+                labelText: 'Nom de l\'ingrédient',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            SizedBox(height: 8.0),
+            Row(
+              children: [
+                Expanded(
+                  flex: 2,
+                  child: TextFormField(
+                    controller: _ingredientQuantityController,
+                    decoration: InputDecoration(
+                      labelText: 'Quantité',
+                      border: OutlineInputBorder(),
+                    ),
+                    keyboardType: TextInputType.number,
+                  ),
+                ),
+                SizedBox(width: 8.0),
+                Expanded(
+                  flex: 3,
+                  child: TextFormField(
+                    controller: _ingredientUnitController,
+                    decoration: InputDecoration(
+                      labelText: 'Unité',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text('Annuler'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              if (_ingredientNameController.text.isNotEmpty &&
+                  _ingredientQuantityController.text.isNotEmpty) {
+                setState(() {
+                  _ingredients.add({
+                    'name': _ingredientNameController.text,
+                    'quantity': double.tryParse(_ingredientQuantityController.text) ?? 0,
+                    'unit': _ingredientUnitController.text,
+                  });
+                });
+                Navigator.pop(context);
+              }
+            },
+            child: Text('Ajouter'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showAddStepDialog() {
+    _stepDescriptionController.clear();
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Ajouter une étape'),
+        content: TextFormField(
+          controller: _stepDescriptionController,
+          decoration: InputDecoration(
+            labelText: 'Description',
+            border: OutlineInputBorder(),
+          ),
+          maxLines: 3,
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text('Annuler'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              if (_stepDescriptionController.text.isNotEmpty) {
+                setState(() {
+                  _steps.add({
+                    'stepNumber': _steps.length + 1,
+                    'description': _stepDescriptionController.text,
+                  });
+                });
+                Navigator.pop(context);
+              }
+            },
+            child: Text('Ajouter'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _editStep(int index) {
+    _stepDescriptionController.text = _steps[index]['description'];
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Modifier l\'étape ${index + 1}'),
+        content: TextFormField(
+          controller: _stepDescriptionController,
+          decoration: InputDecoration(
+            labelText: 'Description',
+            border: OutlineInputBorder(),
+          ),
+          maxLines: 3,
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text('Annuler'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              if (_stepDescriptionController.text.isNotEmpty) {
+                setState(() {
+                  _steps[index]['description'] = _stepDescriptionController.text;
+                });
+                Navigator.pop(context);
+              }
+            },
+            child: Text('Modifier'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _saveRecipe() {
+    if (_formKey.currentState!.validate()) {
+      if (_ingredients.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Ajoutez au moins un ingrédient')),
+        );
+        return;
+      }
+
+      if (_steps.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Ajoutez au moins une étape')),
+        );
+        return;
+      }
+
+      // Créer la liste d'ingrédients
+      final ingredients = _ingredients.map((ingr) => Ingredient(
+        name: ingr['name'],
+        quantity: ingr['quantity'],
+        unit: ingr['unit'],
+      )).toList();
+
+      // Créer la liste d'étapes
+      final steps = _steps.map((step) => RecipeStep(
+        stepNumber: step['stepNumber'],
+        description: step['description'],
+      )).toList();
+
+      // Créer la recette
+      final recipe = Recipe(
+        title: _titleController.text,
+        description: _descriptionController.text,
+        preparationTime: int.parse(_prepTimeController.text),
+        cookingTime: int.parse(_cookTimeController.text),
+        servings: int.parse(_servingsController.text),
+        difficulty: _selectedDifficulty,
+        imageUrl: _imageUrl,
+        categoryId: _selectedCategoryId,
+        ingredients: ingredients,
+        steps: steps,
+      );
+
+      // Enregistrer la recette
+      Provider.of<RecipeService>(context, listen: false).addRecipe(recipe);
+
+      // Afficher un message de confirmation
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Recette ajoutée avec succès')),
+      );
+
+      // Retourner à l'écran précédent
+      Navigator.pop(context);
+    }
+  }
+}..
+
+profil_screen.dart:
+import 'package:flutter/material.dart';
+
+class ProfileScreen extends StatelessWidget {
+  final String userName = 'Jean Gourmand';
+  final String email = 'jean@example.com';
+  final String avatar = 'assets/images/avatar.jpg';
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.grey[50],
+      appBar: AppBar(
+        title: Text('Mon Profil'),
+        backgroundColor: Colors.orange[700],
+        elevation: 0,
+      ),
+      body: Column(
+        children: [
+          SizedBox(height: 24),
+          CircleAvatar(
+            radius: 60,
+            backgroundImage: AssetImage(avatar),
+          ),
+          SizedBox(height: 12),
+          Text(
+            userName,
+            style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+          ),
+          Text(
+            email,
+            style: TextStyle(color: Colors.grey[600]),
+          ),
+          SizedBox(height: 24),
+          Divider(),
+          ListTile(
+            leading: Icon(Icons.settings, color: Colors.orange),
+            title: Text('Paramètres'),
+            trailing: Icon(Icons.arrow_forward_ios),
+            onTap: () {},
+          ),
+          ListTile(
+            leading: Icon(Icons.info, color: Colors.orange),
+            title: Text('À propos'),
+            trailing: Icon(Icons.arrow_forward_ios),
+            onTap: () {},
+          ),
+          Spacer(),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: ElevatedButton.icon(
+              onPressed: () {
+                // Déconnexion ici
+              },
+              icon: Icon(Icons.logout),
+              label: Text('Se déconnecter'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red[400],
+                foregroundColor: Colors.white,
+                minimumSize: Size(double.infinity, 48),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}..
+
+recipe_detail_screen.dart:
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../models/recipe.dart';
+import '../services/recipe_service.dart';
+import 'edit_recipe_screen.dart';
+import 'package:share_plus/share_plus.dart';
+
+class RecipeDetailScreen extends StatelessWidget {
+  final Recipe recipe;
+
+  const RecipeDetailScreen({Key? key, required this.recipe}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(recipe.title),
+        actions: [
+          IconButton(
+            icon: Icon(
+              recipe.isFavorite ? Icons.favorite : Icons.favorite_border,
+              color: recipe.isFavorite ? Colors.red : null,
+            ),
+            onPressed: () {
+              Provider.of<RecipeService>(context, listen: false)
+                  .toggleFavorite(recipe.id);
+            },
+          ),
+          IconButton(
+            icon: Icon(Icons.share),
+            onPressed: () {
+              _shareRecipe(context);
+            },
+          ),
+          PopupMenuButton<String>(
+            onSelected: (value) {
+              if (value == 'edit') {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => EditRecipeScreen(recipe: recipe),
+                  ),
+                );
+              } else if (value == 'delete') {
+                _showDeleteConfirmation(context);
+              }
+            },
+            itemBuilder: (BuildContext context) {
+              return [
+                PopupMenuItem(
+                  value: 'edit',
+                  child: Text('Modifier'),
+                ),
+                PopupMenuItem(
+                  value: 'delete',
+                  child: Text('Supprimer'),
+                ),
+              ];
+            },
+          ),
+        ],
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Image de la recette
+            _buildRecipeImage(),
+
+            // Informations générales
+            Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    recipe.title,
+                    style: Theme.of(context).textTheme.headlineMedium,
+                  ),
+                  SizedBox(height: 8.0),
+                  Text(
+                    recipe.description,
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
+                  SizedBox(height: 16.0),
+
+                  // Statistiques de la recette
+                  _buildRecipeStats(context),
+
+                  Divider(height: 32.0),
+
+                  // Ingrédients
+                  Text(
+                    'Ingrédients',
+                    style: Theme.of(context).textTheme.headlineSmall,
+                  ),
+                  SizedBox(height: 8.0),
+                  _buildIngredientsList(),
+
+                  Divider(height: 32.0),
+
+                  // Étapes de préparation
+                  Text(
+                    'Préparation',
+                    style: Theme.of(context).textTheme.headlineSmall,
+                  ),
+                  SizedBox(height: 8.0),
+                  _buildStepsList(context),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildRecipeImage() {
+    return Container(
+      height: 250,
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: Colors.grey[300],
+      ),
+      child: recipe.imageUrl.isNotEmpty
+          ? Image.network(
+        recipe.imageUrl,
+        fit: BoxFit.cover,
+        errorBuilder: (_, __, ___) => Icon(
+          Icons.restaurant,
+          size: 80,
+          color: Colors.grey[500],
+        ),
+      )
+          : Icon(
+        Icons.restaurant,
+        size: 80,
+        color: Colors.grey[500],
+      ),
+    );
+  }
+
+  Widget _buildRecipeStats(BuildContext context) {
+    final category = Provider.of<RecipeService>(context, listen: false)
+        .getCategoryById(recipe.categoryId);
+
+    return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+        _buildStatItem(
+        context,
+        'Préparation',
+        '${recipe.preparationTime} min'
+    ),
+    _buildStatItem(
+    context,
+    'Cuisson',
+    '${recipe.cookingTime} min'
+    ),
+          _buildStatItem(
+              context,
+              'Portions',
+              '${recipe.servings}'
+          ),
+          _buildStatItem(
+              context,
+              'Difficulté',
+              _getDifficultyText(recipe.difficulty)
+          ),
+          _buildStatItem(
+              context,
+              'Catégorie',
+              category.name,
+              Color(category.color)
+          ),
+        ],
+    );
+  }
+
+  Widget _buildStatItem(BuildContext context, String label, String value, [Color? color]) {
+    return Column(
+      children: [
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 12,
+            color: Colors.grey[600],
+          ),
+        ),
+        SizedBox(height: 4),
+        Container(
+          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          decoration: BoxDecoration(
+            color: color ?? Colors.orange[100],
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Text(
+            value,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: color != null ? Colors.white : Colors.orange[800],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  String _getDifficultyText(int difficulty) {
+    switch (difficulty) {
+      case 1:
+        return 'Facile';
+      case 2:
+        return 'Moyen';
+      case 3:
+        return 'Difficile';
+      default:
+        return 'Inconnu';
+    }
+  }
+
+  Widget _buildIngredientsList() {
+    return ListView.builder(
+      shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
+      itemCount: recipe.ingredients.length,
+      itemBuilder: (context, index) {
+        final ingredient = recipe.ingredients[index];
+        return Padding(
+          padding: EdgeInsets.symmetric(vertical: 4.0),
+          child: Row(
+            children: [
+              Icon(Icons.circle, size: 8, color: Colors.orange),
+              SizedBox(width: 8),
+              Text(
+                '${ingredient.quantity} ${ingredient.unit} ${ingredient.name}',
+                style: TextStyle(fontSize: 16),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildStepsList(BuildContext context) {
+    return ListView.builder(
+      shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
+      itemCount: recipe.steps.length,
+      itemBuilder: (context, index) {
+        final step = recipe.steps[index];
+        return Padding(
+          padding: EdgeInsets.only(bottom: 16.0),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              CircleAvatar(
+                radius: 12,
+                backgroundColor: Colors.orange,
+                child: Text(
+                  '${step.stepNumber}',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              SizedBox(width: 16),
+              Expanded(
+                child: Text(
+                  step.description,
+                  style: TextStyle(fontSize: 16),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void _shareRecipe(BuildContext context) {
+    // Préparer le texte à partager
+    final ingredients = recipe.ingredients
+        .map((i) => '• ${i.quantity} ${i.unit} ${i.name}')
+        .join('\n');
+
+    final steps = recipe.steps
+        .map((s) => '${s.stepNumber}. ${s.description}')
+        .join('\n');
+
+    final text = '''
+📱 Recette partagée depuis l'application Recettes de Cuisine 📱
+
+🍽️ ${recipe.title.toUpperCase()} 🍽️
+
+📝 ${recipe.description}
+
+⏱️ Préparation: ${recipe.preparationTime} min
+⏱️ Cuisson: ${recipe.cookingTime} min
+👥 Portions: ${recipe.servings}
+⭐ Difficulté: ${_getDifficultyText(recipe.difficulty)}
+
+🛒 INGRÉDIENTS:
+$ingredients
+
+👨‍🍳 PRÉPARATION:
+$steps
+
+Bon appétit! 😋
+''';
+
+    Share.share(text);
+  }
+
+  void _showDeleteConfirmation(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Supprimer la recette'),
+        content: Text('Êtes-vous sûr de vouloir supprimer "${recipe.title}" ?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text('Annuler'),
+          ),
+          TextButton(
+            onPressed: () {
+              Provider.of<RecipeService>(context, listen: false)
+                  .deleteRecipe(recipe.id);
+              Navigator.pop(context); // Fermer la boîte de dialogue
+              Navigator.pop(context); // Revenir à l'écran précédent
+            },
+            child: Text('Supprimer'),
+            style: TextButton.styleFrom(foregroundColor: Colors.red),
+          ),
+        ],
+      ),
+    );
+  }
+}..
+
+
+splash_screen.dart:
+import 'package:flutter/material.dart';
+import 'dart:async';
+import 'home_screen.dart';
+
+class SplashScreen extends StatefulWidget {
+  @override
+  _SplashScreenState createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+  late Animation<double> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _animationController = AnimationController(
+      vsync: this,
+      duration: Duration(seconds: 2),
+    );
+
+    _animation = CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeOut,
+    );
+
+    _animationController.forward();
+
+    Timer(Duration(seconds: 3), () {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (_) => HomeScreen()),
+      );
+    });
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Theme.of(context).primaryColor,
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ScaleTransition(
+              scale: _animation,
+              child: Icon(
+                Icons.restaurant_menu,
+                size: 100.0,
+                color: Colors.white,
+              ),
+            ),
+            SizedBox(height: 20.0),
+            FadeTransition(
+              opacity: _animation,
+              child: Text(
+                'Recettes de Cuisine',
+                style: TextStyle(
+                  fontSize: 24.0,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}..
+
+
+point clé : C'est pour assurer une cohérence complète que j'ai d'abord partagé les models et tous les autres fichiers depuis le début. oublie le nom Categori c'est moi qui le veux comme ça. Tu m'assure que jusque là tout est cohérent ?

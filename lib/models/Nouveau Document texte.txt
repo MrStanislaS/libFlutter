@@ -1,0 +1,216 @@
+Launching lib\main.dart on TECNO KH7 in debug mode...
+Running Gradle task 'assembleDebug'...
+lib/screens/categories_screen.dart:33:33: Error: Can't find ')' to match '('.
+          return GestureDetector(
+                                ^
+lib/screens/categories_screen.dart:15:20: Error: Can't find ')' to match '('.
+    return Scaffold(
+                   ^
+lib/services/database_helper.dart:116:35: Error: Type 'UserProfile' not found.
+  Future<void> insertOrUpdateUser(UserProfile user) async {
+                                  ^^^^^^^^^^^
+lib/services/database_helper.dart:126:8: Error: Type 'UserProfile' not found.
+Future<UserProfile?> getUser() async {
+       ^^^^^^^^^^^
+lib/screens/categories_screen.dart:41:2: Error: Expected ';' after this.
+},// Naviguer vers les recettes de la catégorie
+ ^
+lib/screens/categories_screen.dart:43:13: Error: No named parameter with the name 'child'.
+            child: Container(
+            ^^^^^
+/C:/flutter_windows_3.16.9-stable/flutter/packages/flutter/lib/src/widgets/scroll_view.dart:1925:3: Context: Found this candidate, but the arguments don't match.
+  GridView.builder({
+  ^^^^^^^^^^^^^^^^
+lib/screens/categories_screen.dart:68:10: Error: Expected an identifier, but got ','.
+Try inserting an identifier before ','.
+        },
+         ^
+lib/screens/categories_screen.dart:68:9: Error: Expected ';' after this.
+        },
+        ^
+lib/screens/categories_screen.dart:68:10: Error: Unexpected token ';'.
+        },
+         ^
+lib/screens/categories_screen.dart:69:7: Error: Expected an identifier, but got ')'.
+Try inserting an identifier before ')'.
+      ),
+      ^
+lib/screens/categories_screen.dart:68:10: Error: Expected ';' after this.
+        },
+         ^
+lib/screens/categories_screen.dart:69:7: Error: Unexpected token ';'.
+      ),
+      ^
+lib/screens/categories_screen.dart:69:8: Error: Expected an identifier, but got ','.
+Try inserting an identifier before ','.
+      ),
+       ^
+lib/screens/categories_screen.dart:69:7: Error: Expected ';' after this.
+      ),
+      ^
+lib/screens/categories_screen.dart:69:8: Error: Unexpected token ';'.
+      ),
+       ^
+lib/screens/categories_screen.dart:70:5: Error: Expected an identifier, but got ')'.
+Try inserting an identifier before ')'.
+    );
+    ^
+lib/screens/categories_screen.dart:69:8: Error: Expected ';' after this.
+      ),
+       ^
+lib/screens/categories_screen.dart:70:5: Error: Unexpected token ';'.
+    );
+    ^
+lib/screens/categories_screen.dart:9:8: Error: A non-null value must be returned since the return type 'Widget' doesn't allow null.
+ - 'Widget' is from 'package:flutter/src/widgets/framework.dart' ('/C:/flutter_windows_3.16.9-stable/flutter/packages/flutter/lib/src/widgets/framework.dart').
+Widget build(BuildContext context) {
+       ^
+lib/services/database_helper.dart:116:35: Error: 'UserProfile' isn't a type.
+  Future<void> insertOrUpdateUser(UserProfile user) async {
+                                  ^^^^^^^^^^^
+lib/services/database_helper.dart:129:30: Error: The getter 'UserProfile' isn't defined for the class 'DatabaseHelper'.
+ - 'DatabaseHelper' is from 'package:recettes_cuisine/services/database_helper.dart' ('lib/services/database_helper.dart').
+Try correcting the name to the name of an existing getter, or defining a getter or field named 'UserProfile'.
+  if (res.isNotEmpty) return UserProfile.fromMap(res.first);
+                             ^^^^^^^^^^^
+lib/screens/add_recipe_screen.dart:332:31: Error: The argument type 'Context' can't be assigned to the parameter type 'BuildContext'.
+ - 'Context' is from 'package:path/src/context.dart' ('../../../AppData/Local/Pub/Cache/hosted/pub.dev/path-1.9.1/lib/src/context.dart').
+ - 'BuildContext' is from 'package:flutter/src/widgets/framework.dart' ('/C:/flutter_windows_3.16.9-stable/flutter/packages/flutter/lib/src/widgets/framework.dart').
+              style: Theme.of(context).textTheme.titleLarge,
+                              ^
+lib/screens/add_recipe_screen.dart:391:31: Error: The argument type 'Context' can't be assigned to the parameter type 'BuildContext'.
+ - 'Context' is from 'package:path/src/context.dart' ('../../../AppData/Local/Pub/Cache/hosted/pub.dev/path-1.9.1/lib/src/context.dart').
+ - 'BuildContext' is from 'package:flutter/src/widgets/framework.dart' ('/C:/flutter_windows_3.16.9-stable/flutter/packages/flutter/lib/src/widgets/framework.dart').
+              style: Theme.of(context).textTheme.titleLarge,
+                              ^
+lib/screens/add_recipe_screen.dart:477:27: Error: 'await' can only be used in 'async' or 'async*' methods.
+        final savedPath = await _saveImageLocally(File(image.path));
+                          ^^^^^
+lib/screens/add_recipe_screen.dart:491:27: Error: 'await' can only be used in 'async' or 'async*' methods.
+        final savedPath = await _saveImageLocally(File(image.path));
+                          ^^^^^
+lib/screens/add_recipe_screen.dart:506:16: Error: The argument type 'Context' can't be assigned to the parameter type 'BuildContext'.
+ - 'Context' is from 'package:path/src/context.dart' ('../../../AppData/Local/Pub/Cache/hosted/pub.dev/path-1.9.1/lib/src/context.dart').
+ - 'BuildContext' is from 'package:flutter/src/widgets/framework.dart' ('/C:/flutter_windows_3.16.9-stable/flutter/packages/flutter/lib/src/widgets/framework.dart').
+      context: context,
+               ^
+lib/screens/add_recipe_screen.dart:578:16: Error: The argument type 'Context' can't be assigned to the parameter type 'BuildContext'.
+ - 'Context' is from 'package:path/src/context.dart' ('../../../AppData/Local/Pub/Cache/hosted/pub.dev/path-1.9.1/lib/src/context.dart').
+ - 'BuildContext' is from 'package:flutter/src/widgets/framework.dart' ('/C:/flutter_windows_3.16.9-stable/flutter/packages/flutter/lib/src/widgets/framework.dart').
+      context: context,
+               ^
+lib/screens/add_recipe_screen.dart:617:16: Error: The argument type 'Context' can't be assigned to the parameter type 'BuildContext'.
+ - 'Context' is from 'package:path/src/context.dart' ('../../../AppData/Local/Pub/Cache/hosted/pub.dev/path-1.9.1/lib/src/context.dart').
+ - 'BuildContext' is from 'package:flutter/src/widgets/framework.dart' ('/C:/flutter_windows_3.16.9-stable/flutter/packages/flutter/lib/src/widgets/framework.dart').
+      context: context,
+               ^
+lib/screens/add_recipe_screen.dart:652:30: Error: The argument type 'Context' can't be assigned to the parameter type 'BuildContext'.
+ - 'Context' is from 'package:path/src/context.dart' ('../../../AppData/Local/Pub/Cache/hosted/pub.dev/path-1.9.1/lib/src/context.dart').
+ - 'BuildContext' is from 'package:flutter/src/widgets/framework.dart' ('/C:/flutter_windows_3.16.9-stable/flutter/packages/flutter/lib/src/widgets/framework.dart').
+        ScaffoldMessenger.of(context).showSnackBar(
+                             ^
+lib/screens/add_recipe_screen.dart:659:30: Error: The argument type 'Context' can't be assigned to the parameter type 'BuildContext'.
+ - 'Context' is from 'package:path/src/context.dart' ('../../../AppData/Local/Pub/Cache/hosted/pub.dev/path-1.9.1/lib/src/context.dart').
+ - 'BuildContext' is from 'package:flutter/src/widgets/framework.dart' ('/C:/flutter_windows_3.16.9-stable/flutter/packages/flutter/lib/src/widgets/framework.dart').
+        ScaffoldMessenger.of(context).showSnackBar(
+                             ^
+lib/screens/add_recipe_screen.dart:685:21: Error: The argument type 'int' can't be assigned to the parameter type 'Difficulty'.
+ - 'Difficulty' is from 'package:recettes_cuisine/models/recipe.dart' ('lib/models/recipe.dart').
+        difficulty: _selectedDifficulty,
+                    ^
+lib/screens/add_recipe_screen.dart:693:34: Error: The argument type 'Context' can't be assigned to the parameter type 'BuildContext'.
+ - 'Context' is from 'package:path/src/context.dart' ('../../../AppData/Local/Pub/Cache/hosted/pub.dev/path-1.9.1/lib/src/context.dart').
+ - 'BuildContext' is from 'package:flutter/src/widgets/framework.dart' ('/C:/flutter_windows_3.16.9-stable/flutter/packages/flutter/lib/src/widgets/framework.dart').
+      Provider.of<RecipeService>(context, listen: false).addRecipe(recipe);
+                                 ^
+lib/screens/add_recipe_screen.dart:696:28: Error: The argument type 'Context' can't be assigned to the parameter type 'BuildContext'.
+ - 'Context' is from 'package:path/src/context.dart' ('../../../AppData/Local/Pub/Cache/hosted/pub.dev/path-1.9.1/lib/src/context.dart').
+ - 'BuildContext' is from 'package:flutter/src/widgets/framework.dart' ('/C:/flutter_windows_3.16.9-stable/flutter/packages/flutter/lib/src/widgets/framework.dart').
+      ScaffoldMessenger.of(context).showSnackBar(
+                           ^
+lib/screens/add_recipe_screen.dart:701:21: Error: The argument type 'Context' can't be assigned to the parameter type 'BuildContext'.
+ - 'Context' is from 'package:path/src/context.dart' ('../../../AppData/Local/Pub/Cache/hosted/pub.dev/path-1.9.1/lib/src/context.dart').
+ - 'BuildContext' is from 'package:flutter/src/widgets/framework.dart' ('/C:/flutter_windows_3.16.9-stable/flutter/packages/flutter/lib/src/widgets/framework.dart').
+      Navigator.pop(context);
+                    ^
+lib/screens/edit_recipe_screen.dart:63:41: Error: A value of type 'Difficulty' can't be assigned to a variable of type 'int'.
+ - 'Difficulty' is from 'package:recettes_cuisine/models/recipe.dart' ('lib/models/recipe.dart').
+    _selectedDifficulty = widget.recipe.difficulty;
+                                        ^
+lib/screens/edit_recipe_screen.dart:378:31: Error: The argument type 'Context' can't be assigned to the parameter type 'BuildContext'.
+ - 'Context' is from 'package:path/src/context.dart' ('../../../AppData/Local/Pub/Cache/hosted/pub.dev/path-1.9.1/lib/src/context.dart').
+ - 'BuildContext' is from 'package:flutter/src/widgets/framework.dart' ('/C:/flutter_windows_3.16.9-stable/flutter/packages/flutter/lib/src/widgets/framework.dart').
+              style: Theme.of(context).textTheme.titleLarge,
+                              ^
+lib/screens/edit_recipe_screen.dart:437:31: Error: The argument type 'Context' can't be assigned to the parameter type 'BuildContext'.
+ - 'Context' is from 'package:path/src/context.dart' ('../../../AppData/Local/Pub/Cache/hosted/pub.dev/path-1.9.1/lib/src/context.dart').
+ - 'BuildContext' is from 'package:flutter/src/widgets/framework.dart' ('/C:/flutter_windows_3.16.9-stable/flutter/packages/flutter/lib/src/widgets/framework.dart').
+              style: Theme.of(context).textTheme.titleLarge,
+                              ^
+lib/screens/edit_recipe_screen.dart:523:27: Error: 'await' can only be used in 'async' or 'async*' methods.
+        final savedPath = await _saveImageLocally(File(image.path));
+                          ^^^^^
+lib/screens/edit_recipe_screen.dart:537:27: Error: 'await' can only be used in 'async' or 'async*' methods.
+        final savedPath = await _saveImageLocally(File(image.path));
+                          ^^^^^
+lib/screens/edit_recipe_screen.dart:552:16: Error: The argument type 'Context' can't be assigned to the parameter type 'BuildContext'.
+ - 'Context' is from 'package:path/src/context.dart' ('../../../AppData/Local/Pub/Cache/hosted/pub.dev/path-1.9.1/lib/src/context.dart').
+ - 'BuildContext' is from 'package:flutter/src/widgets/framework.dart' ('/C:/flutter_windows_3.16.9-stable/flutter/packages/flutter/lib/src/widgets/framework.dart').
+      context: context,
+               ^
+lib/screens/edit_recipe_screen.dart:624:16: Error: The argument type 'Context' can't be assigned to the parameter type 'BuildContext'.
+ - 'Context' is from 'package:path/src/context.dart' ('../../../AppData/Local/Pub/Cache/hosted/pub.dev/path-1.9.1/lib/src/context.dart').
+ - 'BuildContext' is from 'package:flutter/src/widgets/framework.dart' ('/C:/flutter_windows_3.16.9-stable/flutter/packages/flutter/lib/src/widgets/framework.dart').
+      context: context,
+               ^
+lib/screens/edit_recipe_screen.dart:663:16: Error: The argument type 'Context' can't be assigned to the parameter type 'BuildContext'.
+ - 'Context' is from 'package:path/src/context.dart' ('../../../AppData/Local/Pub/Cache/hosted/pub.dev/path-1.9.1/lib/src/context.dart').
+ - 'BuildContext' is from 'package:flutter/src/widgets/framework.dart' ('/C:/flutter_windows_3.16.9-stable/flutter/packages/flutter/lib/src/widgets/framework.dart').
+      context: context,
+               ^
+lib/screens/edit_recipe_screen.dart:698:30: Error: The argument type 'Context' can't be assigned to the parameter type 'BuildContext'.
+ - 'Context' is from 'package:path/src/context.dart' ('../../../AppData/Local/Pub/Cache/hosted/pub.dev/path-1.9.1/lib/src/context.dart').
+ - 'BuildContext' is from 'package:flutter/src/widgets/framework.dart' ('/C:/flutter_windows_3.16.9-stable/flutter/packages/flutter/lib/src/widgets/framework.dart').
+        ScaffoldMessenger.of(context).showSnackBar(
+                             ^
+lib/screens/edit_recipe_screen.dart:705:30: Error: The argument type 'Context' can't be assigned to the parameter type 'BuildContext'.
+ - 'Context' is from 'package:path/src/context.dart' ('../../../AppData/Local/Pub/Cache/hosted/pub.dev/path-1.9.1/lib/src/context.dart').
+ - 'BuildContext' is from 'package:flutter/src/widgets/framework.dart' ('/C:/flutter_windows_3.16.9-stable/flutter/packages/flutter/lib/src/widgets/framework.dart').
+        ScaffoldMessenger.of(context).showSnackBar(
+                             ^
+lib/screens/edit_recipe_screen.dart:732:21: Error: The argument type 'int' can't be assigned to the parameter type 'Difficulty'.
+ - 'Difficulty' is from 'package:recettes_cuisine/models/recipe.dart' ('lib/models/recipe.dart').
+        difficulty: _selectedDifficulty,
+                    ^
+lib/screens/edit_recipe_screen.dart:741:34: Error: The argument type 'Context' can't be assigned to the parameter type 'BuildContext'.
+ - 'Context' is from 'package:path/src/context.dart' ('../../../AppData/Local/Pub/Cache/hosted/pub.dev/path-1.9.1/lib/src/context.dart').
+ - 'BuildContext' is from 'package:flutter/src/widgets/framework.dart' ('/C:/flutter_windows_3.16.9-stable/flutter/packages/flutter/lib/src/widgets/framework.dart').
+      Provider.of<RecipeService>(context, listen: false).updateRecipe(updatedRecipe);
+                                 ^
+lib/screens/edit_recipe_screen.dart:744:28: Error: The argument type 'Context' can't be assigned to the parameter type 'BuildContext'.
+ - 'Context' is from 'package:path/src/context.dart' ('../../../AppData/Local/Pub/Cache/hosted/pub.dev/path-1.9.1/lib/src/context.dart').
+ - 'BuildContext' is from 'package:flutter/src/widgets/framework.dart' ('/C:/flutter_windows_3.16.9-stable/flutter/packages/flutter/lib/src/widgets/framework.dart').
+      ScaffoldMessenger.of(context).showSnackBar(
+                           ^
+lib/screens/edit_recipe_screen.dart:749:21: Error: The argument type 'Context' can't be assigned to the parameter type 'BuildContext'.
+ - 'Context' is from 'package:path/src/context.dart' ('../../../AppData/Local/Pub/Cache/hosted/pub.dev/path-1.9.1/lib/src/context.dart').
+ - 'BuildContext' is from 'package:flutter/src/widgets/framework.dart' ('/C:/flutter_windows_3.16.9-stable/flutter/packages/flutter/lib/src/widgets/framework.dart').
+      Navigator.pop(context);
+                    ^
+Target kernel_snapshot_program failed: Exception
+
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':app:compileFlutterBuildDebug'.
+> Process 'command 'C:\flutter_windows_3.16.9-stable\flutter\bin\flutter.bat'' finished with non-zero exit value 1
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights.
+> Get more help at https://help.gradle.org.
+
+BUILD FAILED in 1m 20s
+Error: Gradle task assembleDebug failed with exit code 1

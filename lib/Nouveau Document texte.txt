@@ -1,0 +1,324 @@
+Launching lib\main.dart on TECNO KH7 in debug mode...
+Running Gradle task 'assembleDebug'...
+√ Built build\app\outputs\flutter-apk\app-debug.apk
+Installing build\app\outputs\flutter-apk\app-debug.apk...
+I/flutter ( 6491): [IMPORTANT:flutter/shell/platform/android/android_context_gl_impeller.cc(94)] Using the Impeller rendering backend (OpenGLES).
+Debug service listening on ws://127.0.0.1:58711/gFIFZedl7ac=/ws
+Syncing files to device TECNO KH7...
+D/ProfileInstaller( 6491): Installing profile for com.example.untitled2
+D/hw-ProcessState( 6491): Binder ioctl to enable oneway spam detection failed: Invalid argument
+I/Choreographer( 6491): Skipped 130 frames!  The application may be doing too much work on its main thread.
+E/OpenGLRenderer( 6491): fbcNotifyFrameComplete error: undefined symbol: fbcNotifyFrameComplete
+E/OpenGLRenderer( 6491): fbcNotifyNoRender error: undefined symbol: fbcNotifyNoRender
+E/SQLiteLog( 6491): (1) no such table: user_profile in "SELECT * FROM user_profile"
+E/flutter ( 6491): [ERROR:flutter/runtime/dart_vm_initializer.cc(40)] Unhandled Exception: DatabaseException(no such table: user_profile (code 1 SQLITE_ERROR): , while compiling: SELECT * FROM user_profile) sql 'SELECT * FROM user_profile' args []
+E/flutter ( 6491): #0      wrapDatabaseException (package:sqflite_platform_interface/src/platform_exception.dart:12:7)
+E/flutter ( 6491): <asynchronous suspension>
+E/flutter ( 6491): #1      SqfliteDatabaseMixin.txnRawQuery.<anonymous closure> (package:sqflite_common/src/database_mixin.dart:678:30)
+E/flutter ( 6491): <asynchronous suspension>
+E/flutter ( 6491): #2      BasicLock.synchronized (package:synchronized/src/basic_lock.dart:38:16)
+E/flutter ( 6491): <asynchronous suspension>
+E/flutter ( 6491): #3      SqfliteDatabaseMixin.txnSynchronized (package:sqflite_common/src/database_mixin.dart:589:14)
+E/flutter ( 6491): <asynchronous suspension>
+E/flutter ( 6491): #4      DatabaseHelper.getUser (package:recettes_cuisine/services/database_helper.dart:129:15)
+E/flutter ( 6491): <asynchronous suspension>
+E/flutter ( 6491): #5      RecipeService.loadUser (package:recettes_cuisine/services/recipe_service.dart:54:13)
+E/flutter ( 6491): <asynchronous suspension>
+E/flutter ( 6491): 
+
+======== Exception caught by rendering library =====================================================
+The following assertion was thrown during layout:
+A RenderFlex overflowed by 51 pixels on the bottom.
+
+The relevant error-causing widget was: 
+  Column Column:file:///C:/Users/John/Documents/Studio_dev/Recettes_cuisine_v1/lib/widgets/recipe_card.dart:33:16
+The overflowing RenderFlex has an orientation of Axis.vertical.
+The edge of the RenderFlex that is overflowing has been marked in the rendering with a yellow and black striped pattern. This is usually caused by the contents being too big for the RenderFlex.
+
+Consider applying a flex factor (e.g. using an Expanded widget) to force the children of the RenderFlex to fit within the available space instead of being sized to their natural size.
+This is considered an error condition because it indicates that there is content that cannot be seen. If the content is legitimately bigger than the available space, consider clipping it with a ClipRect widget before putting it in the flex, or using a scrollable container rather than a Flex, like a ListView.
+
+The specific RenderFlex in question is: RenderFlex#a6169 OVERFLOWING
+...  parentData: <none> (can use size)
+...  constraints: BoxConstraints(w=200.0, h=202.0)
+...  size: Size(200.0, 202.0)
+...  direction: vertical
+...  mainAxisAlignment: start
+...  mainAxisSize: max
+...  crossAxisAlignment: start
+...  textDirection: ltr
+...  verticalDirection: down
+...  spacing: 0.0
+◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤
+====================================================================================================
+I/libPerfCtl( 6491): fbcNotifySbeRescue ret=-1
+I/GED     ( 6491): ged_boost_gpu_freq, level 100, eOrigin 2, final_idx 31, oppidx_max 31, oppidx_min 0
+I/BufferQueueProducer( 6491): [SurfaceView[com.example.untitled2/com.example.untitled2.MainActivity]#1(BLAST Consumer)1](id:195b00000001,api:1,p:6491,c:6491) disconnect: api 1
+I/BufferQueueProducer( 6491): [SurfaceView[com.example.untitled2/com.example.untitled2.MainActivity]#1(BLAST Consumer)1](id:195b00000001,api:0,p:-1,c:6491) disconnect: api -1
+I/BufferQueueProducer( 6491): [ViewRootImpl[MainActivity]#0(BLAST Consumer)0](id:195b00000000,api:1,p:6491,c:6491) disconnect: api 1
+I/BLASTBufferQueue( 6491): [ViewRootImpl[MainActivity]#0] destructor()
+I/BufferQueueConsumer( 6491): [ViewRootImpl[MainActivity]#0(BLAST Consumer)0](id:195b00000000,api:0,p:-1,c:6491) disconnect
+I/GED     ( 6491): ged_boost_gpu_freq, level 100, eOrigin 2, final_idx 31, oppidx_max 31, oppidx_min 0
+I/BLASTBufferQueue( 6491): releaseBufferCallbackThunk bufferId:27878632718339 framenumber:2 blastBufferQueue is dead
+I/libPerfCtl( 6491): fbcNotifySbeRescue ret=-1
+I/BufferQueueConsumer( 6491): [](id:195b00000002,api:0,p:-1,c:6491) connect: controlledByApp=false
+I/BLASTBufferQueue( 6491): [ViewRootImpl[MainActivity]#2] constructor()
+I/BufferQueueProducer( 6491): [ViewRootImpl[MainActivity]#2(BLAST Consumer)2](id:195b00000002,api:1,p:6491,c:6491) connect: api=1 producerControlledByApp=true
+I/BufferQueueConsumer( 6491): [](id:195b00000003,api:0,p:-1,c:6491) connect: controlledByApp=false
+I/BLASTBufferQueue( 6491): [SurfaceView[com.example.untitled2/com.example.untitled2.MainActivity]#3] constructor()
+I/BLASTBufferQueue( 6491): [SurfaceView[com.example.untitled2/com.example.untitled2.MainActivity]#1] destructor()
+I/BufferQueueConsumer( 6491): [SurfaceView[com.example.untitled2/com.example.untitled2.MainActivity]#1(BLAST Consumer)1](id:195b00000001,api:0,p:-1,c:6491) disconnect
+I/BufferQueueProducer( 6491): [SurfaceView[com.example.untitled2/com.example.untitled2.MainActivity]#3(BLAST Consumer)3](id:195b00000003,api:1,p:6491,c:6491) connect: api=1 producerControlledByApp=true
+I/BufferQueueProducer( 6491): [SurfaceView[com.example.untitled2/com.example.untitled2.MainActivity]#3(BLAST Consumer)3](id:195b00000003,api:1,p:6491,c:6491) disconnect: api 1
+I/BufferQueueProducer( 6491): [SurfaceView[com.example.untitled2/com.example.untitled2.MainActivity]#3(BLAST Consumer)3](id:195b00000003,api:1,p:6491,c:6491) connect: api=1 producerControlledByApp=true
+I/BLASTBufferQueue( 6491): releaseBufferCallbackThunk bufferId:27878632718341 framenumber:430 blastBufferQueue is dead
+I/libPerfCtl( 6491): fbcNotifySbeRescue ret=-1
+I/OpenGLRenderer( 6491): Davey! duration=136396ms; Flags=1, FrameTimelineVsyncId=3396940, IntendedVsync=59464989248492, Vsync=59465139248495, InputEventId=0, HandleInputStart=59465148719851, AnimationStart=59465148722312, PerformTraversalsStart=59465148823005, DrawStart=59465149360466, FrameDeadline=59465025915159, FrameInterval=59465148712158, FrameStartTime=16666667, SyncQueued=59465153753466, SyncStart=59465153909697, IssueDrawCommandsStart=59465154751312, SwapBuffers=59465195901466, FrameCompleted=59601385994320, DequeueBufferDuration=5787693, QueueBufferDuration=1942077, GpuCompleted=59601385994320, SwapBuffersCompleted=59465222071620, DisplayPresentTime=68874095574687, 
+
+======== Exception caught by image resource service ================================================
+The following ArgumentError was thrown resolving an image codec:
+Invalid argument(s): No host specified in URI file:///data/user/0/com.example.untitled2/cache/f0e23555-7877-4954-8362-25524efb81c4/1000101566.jpg
+
+When the exception was thrown, this was the stack: 
+#0      _HttpClient._openUrl (dart:_http/http_impl.dart:3002:9)
+#1      _HttpClient.getUrl (dart:_http/http_impl.dart:2863:48)
+#2      NetworkImage._loadAsync (package:flutter/src/painting/_network_image_io.dart:121:59)
+#3      NetworkImage.loadImage (package:flutter/src/painting/_network_image_io.dart:82:14)
+#4      ImageProvider.resolveStreamForKey.<anonymous closure> (package:flutter/src/painting/image_provider.dart:548:39)
+#5      ImageCache.putIfAbsent (package:flutter/src/painting/image_cache.dart:372:22)
+#6      ImageProvider.resolveStreamForKey (package:flutter/src/painting/image_provider.dart:545:81)
+#7      ScrollAwareImageProvider.resolveStreamForKey (package:flutter/src/widgets/scroll_aware_image_provider.dart:104:19)
+#8      ImageProvider.resolve.<anonymous closure> (package:flutter/src/painting/image_provider.dart:383:9)
+#9      ImageProvider._createErrorHandlerAndKey.<anonymous closure> (package:flutter/src/painting/image_provider.dart:501:28)
+#10     SynchronousFuture.then (package:flutter/src/foundation/synchronous_future.dart:44:27)
+#11     ImageProvider._createErrorHandlerAndKey (package:flutter/src/painting/image_provider.dart:498:10)
+#12     ImageProvider.resolve (package:flutter/src/painting/image_provider.dart:380:5)
+#13     _ImageState._resolveImage (package:flutter/src/widgets/image.dart:1168:44)
+#14     _ImageState.didChangeDependencies (package:flutter/src/widgets/image.dart:1118:5)
+#15     StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:5889:13)
+#16     Element.rebuild (package:flutter/src/widgets/framework.dart:5445:7)
+#17     BuildScope._tryRebuild (package:flutter/src/widgets/framework.dart:2704:15)
+#18     BuildScope._flushDirtyElements (package:flutter/src/widgets/framework.dart:2762:11)
+#19     BuildOwner.buildScope (package:flutter/src/widgets/framework.dart:3066:18)
+#20     WidgetsBinding.drawFrame (package:flutter/src/widgets/binding.dart:1229:21)
+#21     RendererBinding._handlePersistentFrameCallback (package:flutter/src/rendering/binding.dart:482:5)
+#22     SchedulerBinding._invokeFrameCallback (package:flutter/src/scheduler/binding.dart:1442:15)
+#23     SchedulerBinding.handleDrawFrame (package:flutter/src/scheduler/binding.dart:1355:9)
+#24     SchedulerBinding._handleDrawFrame (package:flutter/src/scheduler/binding.dart:1208:5)
+#25     _invoke (dart:ui/hooks.dart:316:13)
+#26     PlatformDispatcher._drawFrame (dart:ui/platform_dispatcher.dart:428:5)
+#27     _drawFrame (dart:ui/hooks.dart:288:31)
+Image provider: NetworkImage("/data/user/0/com.example.untitled2/cache/f0e23555-7877-4954-8362-25524efb81c4/1000101566.jpg", scale: 1.0)
+Image key: NetworkImage("/data/user/0/com.example.untitled2/cache/f0e23555-7877-4954-8362-25524efb81c4/1000101566.jpg", scale: 1.0)
+====================================================================================================
+
+======== Exception caught by gesture ===============================================================
+The following _TypeError was thrown while handling a gesture:
+type 'String' is not a subtype of type 'ShareParams' in type cast
+
+When the exception was thrown, this was the stack: 
+#0      RecipeDetailScreen._shareRecipe (package:recettes_cuisine/screens/recipe_detail_screen.dart:314:35)
+#1      RecipeDetailScreen.build.<anonymous closure> (package:recettes_cuisine/screens/recipe_detail_screen.dart:32:15)
+#2      _InkResponseState.handleTap (package:flutter/src/material/ink_well.dart:1185:21)
+#3      GestureRecognizer.invokeCallback (package:flutter/src/gestures/recognizer.dart:357:24)
+#4      TapGestureRecognizer.handleTapUp (package:flutter/src/gestures/tap.dart:653:11)
+#5      BaseTapGestureRecognizer._checkUp (package:flutter/src/gestures/tap.dart:307:5)
+#6      BaseTapGestureRecognizer.handlePrimaryPointer (package:flutter/src/gestures/tap.dart:240:7)
+#7      PrimaryPointerGestureRecognizer.handleEvent (package:flutter/src/gestures/recognizer.dart:718:9)
+#8      PointerRouter._dispatch (package:flutter/src/gestures/pointer_router.dart:97:12)
+#9      PointerRouter._dispatchEventToRoutes.<anonymous closure> (package:flutter/src/gestures/pointer_router.dart:143:9)
+#10     _LinkedHashMapMixin.forEach (dart:_compact_hash:763:13)
+#11     PointerRouter._dispatchEventToRoutes (package:flutter/src/gestures/pointer_router.dart:141:18)
+#12     PointerRouter.route (package:flutter/src/gestures/pointer_router.dart:131:7)
+#13     GestureBinding.handleEvent (package:flutter/src/gestures/binding.dart:530:19)
+#14     GestureBinding.dispatchEvent (package:flutter/src/gestures/binding.dart:499:22)
+#15     RendererBinding.dispatchEvent (package:flutter/src/rendering/binding.dart:460:11)
+#16     GestureBinding._handlePointerEventImmediately (package:flutter/src/gestures/binding.dart:437:7)
+#17     GestureBinding.handlePointerEvent (package:flutter/src/gestures/binding.dart:394:5)
+#18     GestureBinding._flushPointerEventQueue (package:flutter/src/gestures/binding.dart:341:7)
+#19     GestureBinding._handlePointerDataPacket (package:flutter/src/gestures/binding.dart:308:9)
+#20     _invoke1 (dart:ui/hooks.dart:332:13)
+#21     PlatformDispatcher._dispatchPointerDataPacket (dart:ui/platform_dispatcher.dart:451:7)
+#22     _dispatchPointerDataPacket (dart:ui/hooks.dart:267:31)
+Handler: "onTap"
+Recognizer: TapGestureRecognizer#1c5e7
+  debugOwner: GestureDetector
+  state: possible
+  won arena
+  finalPosition: Offset(282.7, 62.0)
+  finalLocalPosition: Offset(14.7, 18.0)
+  button: 1
+  sent tap down
+====================================================================================================
+E/libEGL  ( 6491): call to OpenGL ES API with no current context (logged once per thread)
+
+======== Exception caught by image resource service ================================================
+The following ArgumentError was thrown resolving an image codec:
+Invalid argument(s): No host specified in URI file:///data/user/0/com.example.untitled2/cache/f0e23555-7877-4954-8362-25524efb81c4/1000101566.jpg
+
+When the exception was thrown, this was the stack: 
+#0      _HttpClient._openUrl (dart:_http/http_impl.dart:3002:9)
+#1      _HttpClient.getUrl (dart:_http/http_impl.dart:2863:48)
+#2      NetworkImage._loadAsync (package:flutter/src/painting/_network_image_io.dart:121:59)
+#3      NetworkImage.loadImage (package:flutter/src/painting/_network_image_io.dart:82:14)
+#4      ImageProvider.resolveStreamForKey.<anonymous closure> (package:flutter/src/painting/image_provider.dart:548:39)
+#5      ImageCache.putIfAbsent (package:flutter/src/painting/image_cache.dart:372:22)
+#6      ImageProvider.resolveStreamForKey (package:flutter/src/painting/image_provider.dart:545:81)
+#7      ScrollAwareImageProvider.resolveStreamForKey (package:flutter/src/widgets/scroll_aware_image_provider.dart:104:19)
+#8      ImageProvider.resolve.<anonymous closure> (package:flutter/src/painting/image_provider.dart:383:9)
+#9      ImageProvider._createErrorHandlerAndKey.<anonymous closure> (package:flutter/src/painting/image_provider.dart:501:28)
+#10     SynchronousFuture.then (package:flutter/src/foundation/synchronous_future.dart:44:27)
+#11     ImageProvider._createErrorHandlerAndKey (package:flutter/src/painting/image_provider.dart:498:10)
+#12     ImageProvider.resolve (package:flutter/src/painting/image_provider.dart:380:5)
+#13     _ImageState._resolveImage (package:flutter/src/widgets/image.dart:1168:44)
+#14     _ImageState.didChangeDependencies (package:flutter/src/widgets/image.dart:1118:5)
+#15     StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:5889:13)
+#16     Element.rebuild (package:flutter/src/widgets/framework.dart:5445:7)
+#17     BuildScope._tryRebuild (package:flutter/src/widgets/framework.dart:2704:15)
+#18     BuildScope._flushDirtyElements (package:flutter/src/widgets/framework.dart:2762:11)
+#19     BuildOwner.buildScope (package:flutter/src/widgets/framework.dart:3066:18)
+#20     WidgetsBinding.drawFrame (package:flutter/src/widgets/binding.dart:1229:21)
+#21     RendererBinding._handlePersistentFrameCallback (package:flutter/src/rendering/binding.dart:482:5)
+#22     SchedulerBinding._invokeFrameCallback (package:flutter/src/scheduler/binding.dart:1442:15)
+#23     SchedulerBinding.handleDrawFrame (package:flutter/src/scheduler/binding.dart:1355:9)
+#24     SchedulerBinding._handleDrawFrame (package:flutter/src/scheduler/binding.dart:1208:5)
+#25     _invoke (dart:ui/hooks.dart:316:13)
+#26     PlatformDispatcher._drawFrame (dart:ui/platform_dispatcher.dart:428:5)
+#27     _drawFrame (dart:ui/hooks.dart:288:31)
+Image provider: NetworkImage("/data/user/0/com.example.untitled2/cache/f0e23555-7877-4954-8362-25524efb81c4/1000101566.jpg", scale: 1.0)
+Image key: NetworkImage("/data/user/0/com.example.untitled2/cache/f0e23555-7877-4954-8362-25524efb81c4/1000101566.jpg", scale: 1.0)
+====================================================================================================
+
+======== Exception caught by image resource service ================================================
+The following ArgumentError was thrown resolving an image codec:
+Invalid argument(s): No host specified in URI file:///data/user/0/com.example.untitled2/cache/f0e23555-7877-4954-8362-25524efb81c4/1000101566.jpg
+
+When the exception was thrown, this was the stack: 
+#0      _HttpClient._openUrl (dart:_http/http_impl.dart:3002:9)
+#1      _HttpClient.getUrl (dart:_http/http_impl.dart:2863:48)
+#2      NetworkImage._loadAsync (package:flutter/src/painting/_network_image_io.dart:121:59)
+#3      NetworkImage.loadImage (package:flutter/src/painting/_network_image_io.dart:82:14)
+#4      ImageProvider.resolveStreamForKey.<anonymous closure> (package:flutter/src/painting/image_provider.dart:548:39)
+#5      ImageCache.putIfAbsent (package:flutter/src/painting/image_cache.dart:372:22)
+#6      ImageProvider.resolveStreamForKey (package:flutter/src/painting/image_provider.dart:545:81)
+#7      ScrollAwareImageProvider.resolveStreamForKey (package:flutter/src/widgets/scroll_aware_image_provider.dart:104:19)
+#8      ImageProvider.resolve.<anonymous closure> (package:flutter/src/painting/image_provider.dart:383:9)
+#9      ImageProvider._createErrorHandlerAndKey.<anonymous closure> (package:flutter/src/painting/image_provider.dart:501:28)
+#10     SynchronousFuture.then (package:flutter/src/foundation/synchronous_future.dart:44:27)
+#11     ImageProvider._createErrorHandlerAndKey (package:flutter/src/painting/image_provider.dart:498:10)
+#12     ImageProvider.resolve (package:flutter/src/painting/image_provider.dart:380:5)
+#13     _ImageState._resolveImage (package:flutter/src/widgets/image.dart:1168:44)
+#14     _ImageState.didChangeDependencies (package:flutter/src/widgets/image.dart:1118:5)
+#15     StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:5889:13)
+#16     Element.rebuild (package:flutter/src/widgets/framework.dart:5445:7)
+#17     BuildScope._tryRebuild (package:flutter/src/widgets/framework.dart:2704:15)
+#18     BuildScope._flushDirtyElements (package:flutter/src/widgets/framework.dart:2762:11)
+#19     BuildOwner.buildScope (package:flutter/src/widgets/framework.dart:3066:18)
+#20     WidgetsBinding.drawFrame (package:flutter/src/widgets/binding.dart:1229:21)
+#21     RendererBinding._handlePersistentFrameCallback (package:flutter/src/rendering/binding.dart:482:5)
+#22     SchedulerBinding._invokeFrameCallback (package:flutter/src/scheduler/binding.dart:1442:15)
+#23     SchedulerBinding.handleDrawFrame (package:flutter/src/scheduler/binding.dart:1355:9)
+#24     SchedulerBinding._handleDrawFrame (package:flutter/src/scheduler/binding.dart:1208:5)
+#25     _invoke (dart:ui/hooks.dart:316:13)
+#26     PlatformDispatcher._drawFrame (dart:ui/platform_dispatcher.dart:428:5)
+#27     _drawFrame (dart:ui/hooks.dart:288:31)
+Image provider: NetworkImage("/data/user/0/com.example.untitled2/cache/f0e23555-7877-4954-8362-25524efb81c4/1000101566.jpg", scale: 1.0)
+Image key: NetworkImage("/data/user/0/com.example.untitled2/cache/f0e23555-7877-4954-8362-25524efb81c4/1000101566.jpg", scale: 1.0)
+====================================================================================================
+
+======== Exception caught by gesture ===============================================================
+The following _TypeError was thrown while handling a gesture:
+type 'String' is not a subtype of type 'ShareParams' in type cast
+
+When the exception was thrown, this was the stack: 
+#0      RecipeDetailScreen._shareRecipe (package:recettes_cuisine/screens/recipe_detail_screen.dart:314:35)
+#1      RecipeDetailScreen.build.<anonymous closure> (package:recettes_cuisine/screens/recipe_detail_screen.dart:32:15)
+#2      _InkResponseState.handleTap (package:flutter/src/material/ink_well.dart:1185:21)
+#3      GestureRecognizer.invokeCallback (package:flutter/src/gestures/recognizer.dart:357:24)
+#4      TapGestureRecognizer.handleTapUp (package:flutter/src/gestures/tap.dart:653:11)
+#5      BaseTapGestureRecognizer._checkUp (package:flutter/src/gestures/tap.dart:307:5)
+#6      BaseTapGestureRecognizer.handlePrimaryPointer (package:flutter/src/gestures/tap.dart:240:7)
+#7      PrimaryPointerGestureRecognizer.handleEvent (package:flutter/src/gestures/recognizer.dart:718:9)
+#8      PointerRouter._dispatch (package:flutter/src/gestures/pointer_router.dart:97:12)
+#9      PointerRouter._dispatchEventToRoutes.<anonymous closure> (package:flutter/src/gestures/pointer_router.dart:143:9)
+#10     _LinkedHashMapMixin.forEach (dart:_compact_hash:763:13)
+#11     PointerRouter._dispatchEventToRoutes (package:flutter/src/gestures/pointer_router.dart:141:18)
+#12     PointerRouter.route (package:flutter/src/gestures/pointer_router.dart:131:7)
+#13     GestureBinding.handleEvent (package:flutter/src/gestures/binding.dart:530:19)
+#14     GestureBinding.dispatchEvent (package:flutter/src/gestures/binding.dart:499:22)
+#15     RendererBinding.dispatchEvent (package:flutter/src/rendering/binding.dart:460:11)
+#16     GestureBinding._handlePointerEventImmediately (package:flutter/src/gestures/binding.dart:437:7)
+#17     GestureBinding.handlePointerEvent (package:flutter/src/gestures/binding.dart:394:5)
+#18     GestureBinding._flushPointerEventQueue (package:flutter/src/gestures/binding.dart:341:7)
+#19     GestureBinding._handlePointerDataPacket (package:flutter/src/gestures/binding.dart:308:9)
+#20     _invoke1 (dart:ui/hooks.dart:332:13)
+#21     PlatformDispatcher._dispatchPointerDataPacket (dart:ui/platform_dispatcher.dart:451:7)
+#22     _dispatchPointerDataPacket (dart:ui/hooks.dart:267:31)
+Handler: "onTap"
+Recognizer: TapGestureRecognizer#5847c
+  debugOwner: GestureDetector
+  state: possible
+  won arena
+  finalPosition: Offset(285.7, 55.3)
+  finalLocalPosition: Offset(17.7, 11.3)
+  button: 1
+  sent tap down
+====================================================================================================
+
+======== Exception caught by image resource service ================================================
+The following ArgumentError was thrown resolving an image codec:
+Invalid argument(s): No host specified in URI file:///data/user/0/com.example.untitled2/cache/f0e23555-7877-4954-8362-25524efb81c4/1000101566.jpg
+
+When the exception was thrown, this was the stack: 
+#0      _HttpClient._openUrl (dart:_http/http_impl.dart:3002:9)
+#1      _HttpClient.getUrl (dart:_http/http_impl.dart:2863:48)
+#2      NetworkImage._loadAsync (package:flutter/src/painting/_network_image_io.dart:121:59)
+#3      NetworkImage.loadImage (package:flutter/src/painting/_network_image_io.dart:82:14)
+#4      ImageProvider.resolveStreamForKey.<anonymous closure> (package:flutter/src/painting/image_provider.dart:548:39)
+#5      ImageCache.putIfAbsent (package:flutter/src/painting/image_cache.dart:372:22)
+#6      ImageProvider.resolveStreamForKey (package:flutter/src/painting/image_provider.dart:545:81)
+#7      ScrollAwareImageProvider.resolveStreamForKey (package:flutter/src/widgets/scroll_aware_image_provider.dart:104:19)
+#8      ImageProvider.resolve.<anonymous closure> (package:flutter/src/painting/image_provider.dart:383:9)
+#9      ImageProvider._createErrorHandlerAndKey.<anonymous closure> (package:flutter/src/painting/image_provider.dart:501:28)
+#10     SynchronousFuture.then (package:flutter/src/foundation/synchronous_future.dart:44:27)
+#11     ImageProvider._createErrorHandlerAndKey (package:flutter/src/painting/image_provider.dart:498:10)
+#12     ImageProvider.resolve (package:flutter/src/painting/image_provider.dart:380:5)
+#13     _ImageState._resolveImage (package:flutter/src/widgets/image.dart:1168:44)
+#14     _ImageState.didChangeDependencies (package:flutter/src/widgets/image.dart:1118:5)
+#15     StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:5889:13)
+#16     Element.rebuild (package:flutter/src/widgets/framework.dart:5445:7)
+#17     BuildScope._tryRebuild (package:flutter/src/widgets/framework.dart:2704:15)
+#18     BuildScope._flushDirtyElements (package:flutter/src/widgets/framework.dart:2762:11)
+#19     BuildOwner.buildScope (package:flutter/src/widgets/framework.dart:3066:18)
+#20     WidgetsBinding.drawFrame (package:flutter/src/widgets/binding.dart:1229:21)
+#21     RendererBinding._handlePersistentFrameCallback (package:flutter/src/rendering/binding.dart:482:5)
+#22     SchedulerBinding._invokeFrameCallback (package:flutter/src/scheduler/binding.dart:1442:15)
+#23     SchedulerBinding.handleDrawFrame (package:flutter/src/scheduler/binding.dart:1355:9)
+#24     SchedulerBinding._handleDrawFrame (package:flutter/src/scheduler/binding.dart:1208:5)
+#25     _invoke (dart:ui/hooks.dart:316:13)
+#26     PlatformDispatcher._drawFrame (dart:ui/platform_dispatcher.dart:428:5)
+#27     _drawFrame (dart:ui/hooks.dart:288:31)
+Image provider: NetworkImage("/data/user/0/com.example.untitled2/cache/f0e23555-7877-4954-8362-25524efb81c4/1000101566.jpg", scale: 1.0)
+Image key: NetworkImage("/data/user/0/com.example.untitled2/cache/f0e23555-7877-4954-8362-25524efb81c4/1000101566.jpg", scale: 1.0)
+====================================================================================================
+I/GED     ( 6491): ged_boost_gpu_freq, level 100, eOrigin 2, final_idx 31, oppidx_max 31, oppidx_min 0
+I/BufferQueueProducer( 6491): [SurfaceView[com.example.untitled2/com.example.untitled2.MainActivity]#3(BLAST Consumer)3](id:195b00000003,api:1,p:6491,c:6491) disconnect: api 1
+I/BufferQueueProducer( 6491): [SurfaceView[com.example.untitled2/com.example.untitled2.MainActivity]#3(BLAST Consumer)3](id:195b00000003,api:0,p:-1,c:6491) disconnect: api -1
+I/BufferQueueProducer( 6491): [ViewRootImpl[MainActivity]#2(BLAST Consumer)2](id:195b00000002,api:1,p:6491,c:6491) disconnect: api 1
+I/BLASTBufferQueue( 6491): [ViewRootImpl[MainActivity]#2] destructor()
+I/BufferQueueConsumer( 6491): [ViewRootImpl[MainActivity]#2(BLAST Consumer)2](id:195b00000002,api:0,p:-1,c:6491) disconnect
+I/GED     ( 6491): ged_boost_gpu_freq, level 100, eOrigin 2, final_idx 31, oppidx_max 31, oppidx_min 0
+I/BLASTBufferQueue( 6491): releaseBufferCallbackThunk bufferId:27878632718342 framenumber:1 blastBufferQueue is dead
+I/GED     ( 6491): ged_boost_gpu_freq, level 100, eOrigin 2, final_idx 31, oppidx_max 31, oppidx_min 0
+I/BufferQueueConsumer( 6491): [](id:195b00000004,api:0,p:-1,c:6491) connect: controlledByApp=false
+I/BLASTBufferQueue( 6491): [ViewRootImpl[MainActivity]#4] constructor()
+I/BufferQueueProducer( 6491): [ViewRootImpl[MainActivity]#4(BLAST Consumer)4](id:195b00000004,api:1,p:6491,c:6491) connect: api=1 producerControlledByApp=true
+I/BufferQueueConsumer( 6491): [](id:195b00000005,api:0,p:-1,c:6491) connect: controlledByApp=false
+I/BLASTBufferQueue( 6491): [SurfaceView[com.example.untitled2/com.example.untitled2.MainActivity]#5] constructor()
+I/BLASTBufferQueue( 6491): [SurfaceView[com.example.untitled2/com.example.untitled2.MainActivity]#3] destructor()
+I/BufferQueueConsumer( 6491): [SurfaceView[com.example.untitled2/com.example.untitled2.MainActivity]#3(BLAST Consumer)3](id:195b00000003,api:0,p:-1,c:6491) disconnect
+I/BufferQueueProducer( 6491): [SurfaceView[com.example.untitled2/com.example.untitled2.MainActivity]#5(BLAST Consumer)5](id:195b00000005,api:1,p:6491,c:6491) connect: api=1 producerControlledByApp=true
+I/BLASTBufferQueue( 6491): releaseBufferCallbackThunk bufferId:27878632718345 framenumber:540 blastBufferQueue is dead
+I/BufferQueueProducer( 6491): [SurfaceView[com.example.untitled2/com.example.untitled2.MainActivity]#5(BLAST Consumer)5](id:195b00000005,api:1,p:6491,c:6491) disconnect: api 1
+I/BufferQueueProducer( 6491): [SurfaceView[com.example.untitled2/com.example.untitled2.MainActivity]#5(BLAST Consumer)5](id:195b00000005,api:1,p:6491,c:6491) connect: api=1 producerControlledByApp=true
+I/OpenGLRenderer( 6491): Davey! duration=219491ms; Flags=1, FrameTimelineVsyncId=3396940, IntendedVsync=59464989248492, Vsync=59465139248495, InputEventId=0, HandleInputStart=59465148719851, AnimationStart=59465148722312, PerformTraversalsStart=59465148823005, DrawStart=59465149360466, FrameDeadline=59465042581826, FrameInterval=59465148712158, FrameStartTime=16666667, SyncQueued=59465153753466, SyncStart=59465153909697, IssueDrawCommandsStart=59465154751312, SwapBuffers=59465195901466, FrameCompleted=59684481285479, DequeueBufferDuration=5787693, QueueBufferDuration=1942077, GpuCompleted=59684481285479, SwapBuffersCompleted=59465222071620, DisplayPresentTime=68874095574687, 
